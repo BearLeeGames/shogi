@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BoardManager : MonoBehaviour {
 
+    public static BoardManager Instance { set; get; }
+
     // prefabs for a single spot on the board
     public GameObject cube;
     public GameObject cubeLight;
@@ -26,19 +28,16 @@ public class BoardManager : MonoBehaviour {
     // 3d array of shogi pieces, representing the board
     public ShogiPiece[,,] ShogiPieces { set; get; }
 
+    // 3d array of all shogi spots (not the pieces)
+    public GameObject[,,] ShogiSpots { set; get; }
+
     // use to face pieces the other way
     private Quaternion flipDirection = Quaternion.Euler(0, 180, 0);
 
+    // determine who's turn it is
+    public bool isPlayer1Turn;
 
-    // ----------------------- FIELDS RELATED TO SELECTING/MOVING PIECES -----------------------
 
-    // the coordinates of the currently clicked/selected spot
-    private int clickedX = -1;
-    private int clickedY = -1;
-    private int clickedZ = -1;
-
-    // the current selected piece
-    public ShogiPiece selectedPiece;
 
 
     // --------------------------------------------------------------------------------------------
@@ -46,6 +45,8 @@ public class BoardManager : MonoBehaviour {
 
     private void Start()
     {
+        Instance = this;
+
         assignNames();
         generateStartingPieces();
         createBoard();
@@ -60,7 +61,6 @@ public class BoardManager : MonoBehaviour {
             return;
         }
 
-        checkClick();
 	}
 
     // ----------------------- START BOARD GENERATION CODE -----------------------
@@ -82,6 +82,9 @@ public class BoardManager : MonoBehaviour {
     // instantiates each cube that makes up the board
     private void createBoard()
     {
+        
+        ShogiSpots = new GameObject[BOARD_SIZE, BOARD_SIZE, BOARD_SIZE];
+
         for (int i = 0; i < BOARD_SIZE; i++)
         {
             for (int j = 0; j < BOARD_SIZE; j++)
@@ -91,8 +94,9 @@ public class BoardManager : MonoBehaviour {
                     GameObject c;
                     if (ShogiPieces[k, j, i] != null)
                     {
-                        c = Instantiate(cubeLight, new Vector3(k, j, i), Quaternion.identity);
+                        c = Instantiate(cubeLight, new Vector3(k + CUBE_OFFSET, j + CUBE_OFFSET, i + CUBE_OFFSET), Quaternion.identity);
                         c.transform.SetParent(transform);
+                        ShogiSpots[k, j, i] = c;
 
                     }
                     else
@@ -348,129 +352,16 @@ public class BoardManager : MonoBehaviour {
     private Vector3 GetCubeCenter(int x, int y, int z)
     {
         Vector3 origin = Vector3.zero;
-        origin.x += CUBE_SIZE * x;
-        origin.y += CUBE_SIZE * y;
-        origin.z += CUBE_SIZE * z;
+        origin.x += (CUBE_SIZE * x) + CUBE_OFFSET;
+        origin.y += (CUBE_SIZE * y) + CUBE_OFFSET;
+        origin.z += (CUBE_SIZE * z) + CUBE_OFFSET;
 
         return origin;
     }
 
     // ----------------------- END BOARD GENERATION CODE -----------------------
 
-    // ----------------------- START BOARD CLICKING/SELECTING CODE -----------------------
 
-    private void checkClick()
-    {
-        // check for click
-        if (Input.GetMouseButtonDown(0))
-        {
-            RaycastHit hit;
-
-            // 1. ray provided is from camera to screen point (mouse position)
-            // 2. out is the result of the collision
-            // 3. 50 is max distance of the ray
-            // 4. layer mask (have the ray only hit the chess board and not the piece
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 50.0f, LayerMask.GetMask("PieceLayer")))
-            {
-                // if mouseover ray hits something
-
-                // set the current position of the mouse
-                clickedX = (int)hit.point.x;
-                clickedY = (int)hit.point.y;
-                clickedZ = (int)hit.point.z;
-
-                // if you clicked within the board
-                if (clickedX >= 0 && clickedY >= 0 && clickedZ >= 0)
-                {
-                    // if you have clicked on a piece already, click on it
-                    if (selectedPiece == null)
-                    {
-                        // Select the piece
-                        Select(clickedX, clickedY, clickedZ);
-                    }
-                }
-
-            } else
-            {
-                clickedX = -1;
-                clickedY = -1;
-                clickedZ = -1;
-            }
-        }
-    }
-
-
-
-
-
-
-
-
-    // generate a cube from code ----------------  NOT BEING USED  ---------------------
-    private void generateCube()
-    {
-        // creating a cube at 0, 0, 0
-        Vector3[] vertices = getVertices(new Vector3(0, 0, 0));
-        int[] triangles = getTriangles();
-
-        createMesh(vertices, triangles);
-    }
-
-    // param: Vector3 of the bottom left back corner
-    // return: all the other vertices that make it a cube
-    private Vector3[] getVertices(Vector3 v)
-    {
-
-        Vector3[] vertices = {
-            new Vector3 (v.x, v.y, v.z),
-            new Vector3 (v.x + 1, v.y, v.z),
-            new Vector3 (v.x + 1, v.y + 1, v.z),
-            new Vector3 (v.x, v.y + 1, v.z),
-            new Vector3 (v.x, v.y + 1, v.z + 1),
-            new Vector3 (v.x + 1, v.y + 1, v.z + 1),
-            new Vector3 (v.x + 1, 0, v.z + 1),
-            new Vector3 (v.x, v.y, v.z + 1),
-        };
-
-        return vertices;
-    }
-
-    // param: none
-    // return: list integers that form the triangles needed to create the cube
-    private int[] getTriangles()
-    {
-        // Note: this is based entirely on the getVertices format
-        int[] triangles =
-        {
-            0, 2, 1, //face front
-			0, 3, 2,
-            2, 3, 4, //face top
-			2, 4, 5,
-            1, 2, 5, //face right
-			1, 5, 6,
-            0, 7, 4, //face left
-			0, 4, 3,
-            5, 4, 7, //face back
-			5, 7, 6,
-            0, 6, 7, //face bottom
-			0, 1, 6
-        };
-
-        return triangles;
-    }
-
-    // param: list of Vector3's (vertices) and list of ints (triangles)
-    // return: mesh object
-    private Mesh createMesh(Vector3[] vertices, int[] triangles)
-    {
-        Mesh mesh = GetComponent<MeshFilter>().mesh;
-        mesh.Clear();
-        mesh.vertices = vertices;
-        mesh.triangles = triangles;
-        mesh.RecalculateNormals();
-
-        return mesh;
-    }
 
 
 }   

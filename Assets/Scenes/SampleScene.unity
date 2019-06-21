@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 534669903}
   m_Layer: 0
   m_Name: Main Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -250,7 +250,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 534669902}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 3, y: 3, z: -6.65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 1633097942}
   - component: {fileID: 1633097941}
   - component: {fileID: 1633097940}
+  - component: {fileID: 1633097943}
   m_Layer: 9
   m_Name: ShogiBoard
   m_TagString: Untagged
@@ -309,6 +310,7 @@ MonoBehaviour:
   - {fileID: 1028076952872660, guid: 052db18ddb073354da8d9996276b8029, type: 2}
   - {fileID: 1221237455616110, guid: 4124bd3db2ec2e04181cd4a5773fb668, type: 2}
   - {fileID: 1818068916768454, guid: a67a456b79b84ee45ae7c212a7647ca1, type: 2}
+  isPlayer1Turn: 0
 --- !u!33 &1633097941
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -351,3 +353,17 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &1633097943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1633097938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3f88c61ee30d4e3f90980e17208b70b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedPiece: {fileID: 0}
+  hoverMaterial: {fileID: 2100000, guid: 503336d8231b6af4695cb3d4d997479f, type: 2}
+  restingMaterial: {fileID: 2100000, guid: ef229fb7323b44a758ce4c16f136eb6f, type: 2}

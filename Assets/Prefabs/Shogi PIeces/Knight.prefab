@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23836569532682298}
   - component: {fileID: 65916061266884466}
   - component: {fileID: 114795278383029908}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Knight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,3 +108,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0b91a9bc6a704b78aebb2105a5171dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer1: 0

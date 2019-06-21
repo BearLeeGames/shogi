@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23076461146760470}
   - component: {fileID: 65993605143813772}
   - component: {fileID: 114442818592640786}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Gold General
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,3 +108,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef4410551a284418189817029d7cccc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer1: 0

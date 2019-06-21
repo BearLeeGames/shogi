@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23890664500559550}
   - component: {fileID: 65837713422120544}
   - component: {fileID: 114218515414709050}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,3 +108,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1af088c054abb4e8baccea019fe54f9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer1: 0

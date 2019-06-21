@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23126483856632000}
   - component: {fileID: 65334114328975072}
   - component: {fileID: 114626833414188554}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bishop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,3 +108,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 459f9a629ad054cf98a6cc42f76f57b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer1: 0
