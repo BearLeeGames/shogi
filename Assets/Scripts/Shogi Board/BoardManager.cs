@@ -11,11 +11,11 @@ public class BoardManager : MonoBehaviour {
     public GameObject cubeLight;
 
     // how many cubes long the side of the board is
-    private int BOARD_SIZE = 7;
+    public int BOARD_SIZE = 7;
 
     // how long a cube is
     private float CUBE_SIZE = 1.0f;
-    private float CUBE_OFFSET = 0.5f;
+    public float CUBE_OFFSET = 0.5f;
 
     // holds the shogi piece GameObjects in this order: Pawn, Lance, Knight, Silver General, Gold General, Bishop, Rook, King
     // use it to generate pieces
@@ -26,21 +26,21 @@ public class BoardManager : MonoBehaviour {
     private List<GameObject> activePieces;
 
     // 3d array of shogi pieces, representing the board
-    public ShogiPiece[,,] ShogiPieces { set; get; }
+    public ShogiPiece[,,] shogiPieces { set; get; }
 
     // 3d array of all shogi spots (not the pieces)
-    public GameObject[,,] ShogiSpots { set; get; }
+    public GameObject[,,] shogiSpots { set; get; }
 
     // use to face pieces the other way
     private Quaternion flipDirection = Quaternion.Euler(0, 180, 0);
 
     // determine who's turn it is
-    public bool isPlayer1Turn;
+    public bool isPlayer1Turn = true;
 
 
 
 
-    // --------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------
 
 
     private void Start()
@@ -83,7 +83,7 @@ public class BoardManager : MonoBehaviour {
     private void createBoard()
     {
         
-        ShogiSpots = new GameObject[BOARD_SIZE, BOARD_SIZE, BOARD_SIZE];
+        shogiSpots = new GameObject[BOARD_SIZE, BOARD_SIZE, BOARD_SIZE];
 
         for (int i = 0; i < BOARD_SIZE; i++)
         {
@@ -92,11 +92,11 @@ public class BoardManager : MonoBehaviour {
                 for (int k = 0; k < BOARD_SIZE; k++)
                 {
                     GameObject c;
-                    if (ShogiPieces[k, j, i] != null)
+                    if (shogiPieces[k, j, i] != null)
                     {
                         c = Instantiate(cubeLight, new Vector3(k + CUBE_OFFSET, j + CUBE_OFFSET, i + CUBE_OFFSET), Quaternion.identity);
                         c.transform.SetParent(transform);
-                        ShogiSpots[k, j, i] = c;
+                        shogiSpots[k, j, i] = c;
 
                     }
                     else
@@ -112,7 +112,7 @@ public class BoardManager : MonoBehaviour {
     private void generateStartingPieces()
     {
         activePieces = new List<GameObject>();
-        ShogiPieces = new ShogiPiece[BOARD_SIZE, BOARD_SIZE, BOARD_SIZE];
+        shogiPieces = new ShogiPiece[BOARD_SIZE, BOARD_SIZE, BOARD_SIZE];
 
         // the boolean controls which player we are spawning the pieces for
         // (true is player1, and false is player 2)
@@ -154,20 +154,20 @@ public class BoardManager : MonoBehaviour {
         // spawn top and bottom 3 pawns
         for (int x = 2; x < 5; x++)
         {
-            SpawnPiece("Pawn", x, BOARD_SIZE - 2, z, q);
-            SpawnPiece("Pawn", x, 1, z, q);
+            SpawnPiece("Pawn", x, BOARD_SIZE - 2, z, q, isPlayer1);
+            SpawnPiece("Pawn", x, 1, z, q, isPlayer1);
         }
 
         // spawn middle height pawns
         for (int x = 0; x < BOARD_SIZE; x++)
         {
-            SpawnPiece("Pawn", x, (int)BOARD_SIZE / 2, z, q);
+            SpawnPiece("Pawn", x, (int)BOARD_SIZE / 2, z, q, isPlayer1);
         }
 
     }
 
     // Lances
-   private void SpawnLances(bool isPlayer1)
+    private void SpawnLances(bool isPlayer1)
     {
         // z - row, q - direction 
         int z;
@@ -176,8 +176,8 @@ public class BoardManager : MonoBehaviour {
         // change row and direction pieces are facing
         setPlayerSide(isPlayer1, false, out z, out q);
 
-        SpawnPiece("Lance", 0, 3, z, q);
-        SpawnPiece("Lance", BOARD_SIZE - 1, 3, z, q);
+        SpawnPiece("Lance", 0, 3, z, q, isPlayer1);
+        SpawnPiece("Lance", BOARD_SIZE - 1, 3, z, q, isPlayer1);
     }
 
     // Knights
@@ -191,10 +191,10 @@ public class BoardManager : MonoBehaviour {
         setPlayerSide(isPlayer1, false, out z, out q);
 
         // spawn knights on the inner corners of the closest panel
-        SpawnPiece("Knight", 1, BOARD_SIZE - 2, z, q);
-        SpawnPiece("Knight", 1, 1, z, q);
-        SpawnPiece("Knight", BOARD_SIZE - 2, BOARD_SIZE - 2, z, q);
-        SpawnPiece("Knight", BOARD_SIZE - 2, 1, z, q);
+        SpawnPiece("Knight", 1, BOARD_SIZE - 2, z, q, isPlayer1);
+        SpawnPiece("Knight", 1, 1, z, q, isPlayer1);
+        SpawnPiece("Knight", BOARD_SIZE - 2, BOARD_SIZE - 2, z, q, isPlayer1);
+        SpawnPiece("Knight", BOARD_SIZE - 2, 1, z, q, isPlayer1);
     }
 
     // Silver Generals
@@ -212,13 +212,13 @@ public class BoardManager : MonoBehaviour {
         if (!isPlayer1)
         {
             // spawn silver generals near the center
-            SpawnPiece("Silver General", 2, 2, z, q);
-            SpawnPiece("Silver General", 4, 4, z, q);
+            SpawnPiece("Silver General", 2, 2, BOARD_SIZE - 2, q, isPlayer1);
+            SpawnPiece("Silver General", 4, 4, BOARD_SIZE - 2, q, isPlayer1);
         }
         else
         {
-            SpawnPiece("Silver General", 2, 4, z, q);
-            SpawnPiece("Silver General", 4, 2, z, q);
+            SpawnPiece("Silver General", 2, 4, 1, q, isPlayer1);
+            SpawnPiece("Silver General", 4, 2, 1, q, isPlayer1);
         }
 
 
@@ -238,13 +238,13 @@ public class BoardManager : MonoBehaviour {
         if (!isPlayer1)
         {
             // spawn gold generals near the center
-            SpawnPiece("Gold General", 2, 4, z, q);
-            SpawnPiece("Gold General", 4, 2, z, q);
+            SpawnPiece("Gold General", 2, 4, z, q, isPlayer1);
+            SpawnPiece("Gold General", 4, 2, z, q, isPlayer1);
         }
         else
         {
-            SpawnPiece("Gold General", 2, 2, z, q);
-            SpawnPiece("Gold General", 4, 4, z, q);
+            SpawnPiece("Gold General", 2, 2, z, q, isPlayer1);
+            SpawnPiece("Gold General", 4, 4, z, q, isPlayer1);
         }
 
 
@@ -263,11 +263,11 @@ public class BoardManager : MonoBehaviour {
         if (!isPlayer1)
         {
             // spawn a Bishop on the left of the King
-            SpawnPiece("Bishop", BOARD_SIZE - 2, 3, z, q);
+            SpawnPiece("Bishop", BOARD_SIZE - 2, 3, z, q, isPlayer1);
         }
         else
         {
-            SpawnPiece("Bishop", 1, 3, z, q);
+            SpawnPiece("Bishop", 1, 3, z, q, isPlayer1);
         }
 
     }
@@ -285,11 +285,11 @@ public class BoardManager : MonoBehaviour {
         if (!isPlayer1)
         {
             // spawn a Bishop on the left of the King
-            SpawnPiece("Rook", 1, 3, z, q);
+            SpawnPiece("Rook", 1, 3, z, q, isPlayer1);
         }
         else
         {
-            SpawnPiece("Rook", BOARD_SIZE - 2, 3, z, q);
+            SpawnPiece("Rook", BOARD_SIZE - 2, 3, z, q, isPlayer1);
         }
     }
 
@@ -304,7 +304,7 @@ public class BoardManager : MonoBehaviour {
         setPlayerSide(isPlayer1, false, out z, out q);
 
         // spawn king in center
-        SpawnPiece("King", 3, 3, z, q);
+        SpawnPiece("King", 3, 3, z, q, isPlayer1);
     }
 
     // set which side the pieces are spawning and which direction they're facing
@@ -337,15 +337,16 @@ public class BoardManager : MonoBehaviour {
 
     // spawn a shogi piece on the board
     // provide index of piece prefab, and xyz coordinate location
-    private void SpawnPiece(string name, int x, int y, int z, Quaternion direction)
+    private void SpawnPiece(string name, int x, int y, int z, Quaternion direction, bool isPlayer1)
     {
         GameObject piece = Instantiate(nameToPiece[name], GetCubeCenter(x, y, z), direction) as GameObject;
 
         // give the piece a transform and add it to the board
         piece.transform.SetParent(transform);
-        ShogiPieces[x, y, z] = piece.GetComponent<ShogiPiece>();
-        //ShogiPieces[x, y, z].SetPosition(x, y, z);
+        shogiPieces[x, y, z] = piece.GetComponent<ShogiPiece>();
+        shogiPieces[x, y, z].SetPosition(x, y, z);
         activePieces.Add(piece);
+        piece.GetComponent<ShogiPiece>().setPlayer(isPlayer1);
     }
 
     // gets the center of where the cube should be based on xyz
