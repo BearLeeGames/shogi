@@ -5,9 +5,9 @@ using UnityEngine;
 public class SilverGeneral : ShogiPiece
 {
     // script for Silver General fields and behaviors
-
     
 
+    // TODO: check for which team the piece is on before ruling out an available spot
     public override bool[,,] PossibleMoves()
     {
         int size = BoardManager.Instance.BOARD_SIZE;

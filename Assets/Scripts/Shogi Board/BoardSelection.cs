@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class BoardSelection : MonoBehaviour {
 
-    // ----------------------- FIELDS RELATED TO SELECTING/MOVING PIECES -----------------------
+    #region Data Members
 
     // the coordinates of the currently clicked/selected spot
     private int currentX = -1;
@@ -12,37 +11,77 @@ public class BoardSelection : MonoBehaviour {
     private int currentZ = -1;
 
     // the current selected piece
-    public ShogiPiece selectedPiece;
+    private ShogiPiece selectedPiece;
 
-    // the current hovered spot
+    // the current mouse hovered spot (a CubeLight object)
     private GameObject hoveredSpot;
 
     // materials used to show hover vs resting cube
     public Material hoverMaterial;
     public Material restingMaterial;
 
+    [SerializeField]
     // GameObject used to show the movement/attack range of a pieve
-    public GameObject rangeCube;
+    private GameObject rangeCube;
 
     // list of range cubes
     private List<GameObject> rangeCubes;
 
+    // 3d list of bools showing which locations are allowed
     private bool[,,] allowedMoves;
 
+    #endregion
+
+    #region Member Properties
+
+    // pool the previously used range cubes
+    // reuse and create new range cubes as necessary
+    private GameObject GetRangeCube()
+    {
+        // return the first available (not active) range cube 
+        GameObject cube = rangeCubes.Find(c => !c.activeSelf);
+
+        // if there aren't any available to use, instatiate another one and add it
+        if (cube == null)
+        {
+            cube = Instantiate(rangeCube);
+            rangeCubes.Add(cube);
+        }
+
+        return cube;
+    }
+
+    #endregion
+
+    #region Unity Methods
 
     void Start () {
         rangeCubes = new List<GameObject>();
 	}
 	
 	void Update () {
-        checkHover();
-        checkClick();
+        CheckHover();
+        CheckClick();
     }
 
-    // ----------------------- START BOARD CLICKING/SELECTING CODE -----------------------
+    #endregion
+
+    // none atm
+    #region Constructors
+
+
+
+    #endregion
+
+    // none atm
+    #region Public Methods
+
+    #endregion
+
+    #region Member Functions
 
     // update the current location of the mouse and highlight pieces
-    private void checkHover()
+    private void CheckHover()
     {
         RaycastHit hit;
 
@@ -61,21 +100,34 @@ public class BoardSelection : MonoBehaviour {
 
             // Note: currently hovering over the colored block (smaller) and not the surrounding block (fills entire space)
             // the surrounding block sometimes pushes your cursor over to the next block, since it perfectly fills the space to the point where (1, 1.75) becomes (1, 2)
-            // 
-
+            
+            // if there is a cube there
             if (BoardManager.Instance.shogiSpots[currentX, currentY, currentZ] != null)
             {
                 // this if should always be true currently, with only board spots with pieces in them being shown
 
-                // change the color of the previous spot back to normal
-                if (hoveredSpot != null)
+
+
+                // if the hovered spot is different from the previous one
+                if (hoveredSpot != BoardManager.Instance.shogiSpots[currentX, currentY, currentZ])
                 {
-                    hoveredSpot.GetComponent<Renderer>().material = restingMaterial;
+
+                    // if the currently hovered spot isn't null
+                    if (hoveredSpot != null)
+                    {
+                        // change the material of the previously hovered spot back to normal
+                        hoveredSpot.GetComponent<Renderer>().material = restingMaterial;
+                    }
+
+                    // change the new hovered spot to the hoverMaterial
+                    BoardManager.Instance.shogiSpots[currentX, currentY, currentZ].GetComponent<Renderer>().material = hoverMaterial;
+
+                    // set the new hoveredSpot
+                    hoveredSpot = BoardManager.Instance.shogiSpots[currentX, currentY, currentZ];
                 }
 
 
-                BoardManager.Instance.shogiSpots[currentX, currentY, currentZ].GetComponent<Renderer>().material = hoverMaterial;
-                hoveredSpot = BoardManager.Instance.shogiSpots[currentX, currentY, currentZ];
+
             }
         }
 
@@ -96,7 +148,7 @@ public class BoardSelection : MonoBehaviour {
         }
     }
 
-    private void checkClick()
+    private void CheckClick()
     {
         // check for click
         if (Input.GetMouseButtonDown(0))
@@ -124,16 +176,26 @@ public class BoardSelection : MonoBehaviour {
                     //MoveChessman(currentX, currentY, currentZ);
                 }
             }
+            else
+            {
+                // deactivate the selected piece here
+            }
 
         }
     }
 
+     
+    /* select the clicked shogi piece (show shogi piece range)
+     * Params:
+     *  xyz - coordinates for the shogiPieces board
+     *
+     */
     private void SelectShogiPiece(int x, int y, int z)
     {
         // don't select anything if there's no piece there
         if (BoardManager.Instance.shogiPieces[x, y, z] == null)
         {
-            Debug.Log("no piece there?");
+            Debug.Log("No piece there");
             return;
         }
 
@@ -144,49 +206,52 @@ public class BoardSelection : MonoBehaviour {
             return;
         }
 
-        //set allowed moves
+        // set allowed moves based on the piece type
         allowedMoves = BoardManager.Instance.shogiPieces[x, y, z].PossibleMoves();
+
+        // set the selected piece
         selectedPiece = BoardManager.Instance.shogiPieces[x, y, z];
-        showAllowedMoves(allowedMoves);
+
+        // show the movement range
+        ShowAllowedMoves(allowedMoves);
 
     }
 
-    // pool the previously used range cubes
-    // reuse and create new range cubes as necessary
-    private GameObject getRangeCube()
+    /* for each possible move, render a range cube to indicate it
+     * Params:
+     *  1. moves - 3d boolean array of entire board, with true in areas where move is available
+     *
+     *  this could probably be more efficient
+     */
+
+    private void ShowAllowedMoves(bool[,,] moves)
     {
-        // return the first available (not active) range cube 
-        GameObject cube = rangeCubes.Find(c => !c.activeSelf);
 
-        // if there aren't any available to use, instatiate another one and add it
-        if (cube == null)
-        {
-            cube = Instantiate(rangeCube);
-            rangeCubes.Add(cube);
-        }
-
-        return cube;
-    }
-
-    // for each possible move, render a range cube to indicate it
-    public void showAllowedMoves(bool[,,] moves)
-    {
-        Debug.Log(moves);
+        // loop through each spot on the board
         for(int i = 0; i < BoardManager.Instance.BOARD_SIZE; i++)
         {
             for (int j = 0; j < BoardManager.Instance.BOARD_SIZE; j++)
             {
                 for (int k = 0; k < BoardManager.Instance.BOARD_SIZE; k++)
                 {
+                    // if the current spot is a valid l
                     if (moves[k, j, i])
                     {
                         Debug.Log("found a cube to render");
-                        GameObject cube = getRangeCube();
+
+                        // grab an available range cube
+                        GameObject cube = GetRangeCube();
+
+                        // activate the cube so we can see the range
                         cube.SetActive(true);
+
+                        // set the position of the cube to the correct location
                         cube.transform.position = new Vector3(k + BoardManager.Instance.CUBE_OFFSET, j + BoardManager.Instance.CUBE_OFFSET, i + BoardManager.Instance.CUBE_OFFSET);
                     }
                 }
             }
         }
     }
+
+    #endregion
 }
