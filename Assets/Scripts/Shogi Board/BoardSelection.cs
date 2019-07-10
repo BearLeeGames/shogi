@@ -21,8 +21,14 @@ public class BoardSelection : MonoBehaviour {
     public Material restingMaterial;
 
     [SerializeField]
+    // material used for rangeCubes
+    private Material rangeMaterial;
+
+    [SerializeField]
     // GameObject used to show the movement/attack range of a pieve
     private GameObject rangeCube;
+
+
 
     // list of range cubes
     private List<GameObject> rangeCubes;
@@ -89,45 +95,39 @@ public class BoardSelection : MonoBehaviour {
         // 2. out is the result of the collision
         // 3. 50 is max distance of the ray
         // 4. layer mask (have the ray only hit the chess board and not the piece
+
+        // if hovering something
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 50.0f, LayerMask.GetMask("PieceLayer")))
         {
             // set the current position of the mouse
             currentX = (int)Mathf.Floor(hit.point.x);
             currentY = (int)Mathf.Floor(hit.point.y);
-            currentZ = (int)Mathf.Floor(hit.point.z); 
+            currentZ = (int)Mathf.Floor(hit.point.z);
 
             //Debug.Log("hovering over: " + currentX + " " + currentY + " " + currentZ);
 
             // Note: currently hovering over the colored block (smaller) and not the surrounding block (fills entire space)
             // the surrounding block sometimes pushes your cursor over to the next block, since it perfectly fills the space to the point where (1, 1.75) becomes (1, 2)
-            
+
+            GameObject currentHover = BoardManager.Instance.shogiSpots[currentX, currentY, currentZ];
+
             // if there is a cube there
-            if (BoardManager.Instance.shogiSpots[currentX, currentY, currentZ] != null)
+            if (currentHover != null)
             {
                 // this if should always be true currently, with only board spots with pieces in them being shown
 
-
-
-                // if the hovered spot is different from the previous one
-                if (hoveredSpot != BoardManager.Instance.shogiSpots[currentX, currentY, currentZ])
-                {
-
-                    // if the currently hovered spot isn't null
-                    if (hoveredSpot != null)
-                    {
-                        // change the material of the previously hovered spot back to normal
-                        hoveredSpot.GetComponent<Renderer>().material = restingMaterial;
-                    }
-
-                    // change the new hovered spot to the hoverMaterial
-                    BoardManager.Instance.shogiSpots[currentX, currentY, currentZ].GetComponent<Renderer>().material = hoverMaterial;
-
-                    // set the new hoveredSpot
-                    hoveredSpot = BoardManager.Instance.shogiSpots[currentX, currentY, currentZ];
-                }
+                // change the design of hovered cubes
+                handleHoverCube(currentX, currentY, currentZ);
+            }
 
 
 
+            // if we have a piece selected, and we're hovering over a range cube
+            else if (selectedPiece != null && allowedMoves[currentX, currentY, currentZ])
+            {
+                Debug.Log("hovering over range cube");
+                // change the design of the hovered range cube
+                handleHoverCube(currentX, currentY, currentZ);
             }
         }
 
@@ -136,7 +136,15 @@ public class BoardSelection : MonoBehaviour {
             // change the color back to normal
             if (hoveredSpot != null)
             {
-                hoveredSpot.GetComponent<Renderer>().material = restingMaterial;
+                if (hoveredSpot.tag == "Range")
+                {
+                    // change the material of the previously hovered spot back to normal
+                    hoveredSpot.GetComponent<Renderer>().material = rangeMaterial;
+                }
+                else
+                {
+                    hoveredSpot.GetComponent<Renderer>().material = restingMaterial;
+                }
             }
 
             // set the hovered spot to null (not hovering over anything
@@ -148,6 +156,39 @@ public class BoardSelection : MonoBehaviour {
         }
     }
 
+    // handle the material of the cubes being hovered over
+    private void handleHoverCube(int currentX, int currentY, int currentZ)
+    {
+        // if the hovered spot is different from the previously hovered spot
+        if (hoveredSpot != BoardManager.Instance.shogiSpots[currentX, currentY, currentZ])
+        {
+
+            // if the currently hovered spot isn't null
+            if (hoveredSpot != null)
+            {
+
+                if (hoveredSpot.tag == "Range")
+                {
+                    // change the material of the previously hovered spot back to normal
+                    hoveredSpot.GetComponent<Renderer>().material = rangeMaterial;
+                }
+                else
+                {
+                    hoveredSpot.GetComponent<Renderer>().material = restingMaterial;
+                }
+
+
+            }
+
+            // change the new hovered spot to the hoverMaterial
+            BoardManager.Instance.shogiSpots[currentX, currentY, currentZ].GetComponent<Renderer>().material = hoverMaterial;
+
+            // set the new hoveredSpot
+            hoveredSpot = BoardManager.Instance.shogiSpots[currentX, currentY, currentZ];
+        }
+    }
+
+    // check what you've clicked on
     private void CheckClick()
     {
         // check for click
@@ -198,7 +239,7 @@ public class BoardSelection : MonoBehaviour {
             Debug.Log("No piece there");
             return;
         }
-
+        
         // don't select the piece if it's not your turn
         if (BoardManager.Instance.shogiPieces[x, y, z].isPlayer1 != BoardManager.Instance.isPlayer1Turn)
         {
@@ -237,8 +278,8 @@ public class BoardSelection : MonoBehaviour {
                     // if the current spot is a valid l
                     if (moves[k, j, i])
                     {
-                        Debug.Log("found a cube to render");
 
+                        
                         // grab an available range cube
                         GameObject cube = GetRangeCube();
 
@@ -247,6 +288,9 @@ public class BoardSelection : MonoBehaviour {
 
                         // set the position of the cube to the correct location
                         cube.transform.position = new Vector3(k + BoardManager.Instance.CUBE_OFFSET, j + BoardManager.Instance.CUBE_OFFSET, i + BoardManager.Instance.CUBE_OFFSET);
+
+                        // add it to the board of spots
+                        BoardManager.Instance.shogiSpots[k, j, i] = cube;
                     }
                 }
             }

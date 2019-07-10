@@ -22,9 +22,9 @@ GameObject:
   - component: {fileID: 33312543431652924}
   - component: {fileID: 23373113882200302}
   - component: {fileID: 65638459608940066}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Range Cube
-  m_TagString: Untagged
+  m_TagString: Range
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

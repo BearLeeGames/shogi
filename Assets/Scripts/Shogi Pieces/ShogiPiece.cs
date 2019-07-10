@@ -16,13 +16,17 @@ public abstract class ShogiPiece : MonoBehaviour
 
     #endregion
 
+    // none
     #region Member Properties
 
     #endregion
 
+
+    // none
     #region Unity Methods
     #endregion
-
+        
+    // none
     #region Constructors
 
     #endregion

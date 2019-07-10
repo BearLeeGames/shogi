@@ -26,6 +26,7 @@ public class SilverGeneral : ShogiPiece
         // check the panel in front for pieces
         for (int i = -1; i < 2; i++)
         {
+            // check left, center, and right positions
             for (int j = -1; j < 2; j++)
             {
                 // if out of bounds, skip this option
@@ -36,11 +37,15 @@ public class SilverGeneral : ShogiPiece
 
                 Debug.Log("checking position: " + (currentX + j) + (currentY + i) + (currentZ + forward));
 
-                // if there is not one there, add it as an available move
-                if (BoardManager.Instance.shogiPieces[currentX + j, currentY + i, currentZ + forward] == null)
+                // get the object at that position
+                c = BoardManager.Instance.shogiPieces[currentX + j, currentY + i, currentZ + forward];
+
+                // if there is not one there, or it is an enemy piece, add it as an available move
+                if (c == null || c.isPlayer1 != isPlayer1)
                 {
                     moves[currentX + j, currentY + i, currentZ + forward] = true;
                 }
+               
             }
         }
 
