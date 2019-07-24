@@ -201,7 +201,7 @@ public class BoardSelection : MonoBehaviour {
             // if you clicked within the board
             if (currentX >= 0 && currentY >= 0 && currentZ >= 0)
             {
-                // if you have clicked on a piece already, click on it
+                // if you haven't clicked on a piece already, click on it
                 if (selectedPiece == null)
                 {
                     Debug.Log("clicked on a piece!");
@@ -212,9 +212,9 @@ public class BoardSelection : MonoBehaviour {
                 }
                 else
                 {
-                    Debug.Log("piece already clicked on");
+                    Debug.Log("piece already clicked on, move piece");
                     // go ahead and move the piece
-                    //MoveChessman(currentX, currentY, currentZ);
+                    MoveShogiPiece(currentX, currentY, currentZ);
                 }
             }
             else
@@ -223,6 +223,48 @@ public class BoardSelection : MonoBehaviour {
             }
 
         }
+    }
+   
+    
+    /*
+     * remove the piece at that spot, then move the piece
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+    private void MoveShogiPiece(int x, int y, int z)
+    {
+
+
+        if (allowedMoves[x, y, z])
+        {
+            BoardManager bm = BoardManager.Instance;
+            ShogiPiece sp = bm.shogiPieces[x, y, z];
+
+            // if there's a piece there, destroy it check the team
+            if (sp != null && sp.isPlayer1 != bm.isPlayer1Turn)
+            {
+                Destroy(sp.gameObject);
+            }
+
+            // remove the piece from original position in the 3d array
+            bm.shogiPieces[selectedPiece.currentX, selectedPiece.currentY, selectedPiece.currentZ] = null;
+
+            // get position of selected piece
+            selectedPiece.transform.position = bm.GetCubeCenter(x, y, z);
+
+            // set the piece position (for it's own properties)
+            selectedPiece.SetPosition(x, y, z);
+            bm.shogiPieces[x, y, z] = selectedPiece;
+            bm.isPlayer1Turn = !bm.isPlayer1Turn;
+
+
+        }
+        hideRange();
+        selectedPiece = null;
+
     }
 
      
@@ -294,6 +336,15 @@ public class BoardSelection : MonoBehaviour {
                     }
                 }
             }
+        }
+    }
+
+    // for each rangecube, set active to false
+    private void hideRange()
+    {
+        foreach (GameObject gObj in rangeCubes)
+        {
+            gObj.SetActive(false);
         }
     }
 

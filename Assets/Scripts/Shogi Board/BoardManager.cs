@@ -109,7 +109,7 @@ public class BoardManager : MonoBehaviour {
      *  Returns:
      *     origin: Vector3 of location where cube center should be 
      */
-    private Vector3 GetCubeCenter(int x, int y, int z)
+    public Vector3 GetCubeCenter(int x, int y, int z)
     {
         Vector3 origin = Vector3.zero;
         origin.x += (CUBE_SIZE * x) + CUBE_OFFSET;
