@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pawn : ShogiPiece
+public class Pawn2 : ShogiPiece
 {
     // script for Pawn fields and behaviors
 }

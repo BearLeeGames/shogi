@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lance : ShogiPiece
+public class Lance2 : ShogiPiece
 {
     // script for Lance fields and behaviors
 }

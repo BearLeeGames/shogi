@@ -227,9 +227,12 @@ public class BoardSelection : MonoBehaviour {
    
     
     /*
-     * remove the piece at that spot, then move the piece
+     * Moves a piece to the given location
      * 
+     * Params: x, y, z
      * 
+     * check if move is allowed (based on the piece function)
+     * check/destroy if there's a piece in the targeted location
      * 
      * 
      * 
@@ -249,14 +252,16 @@ public class BoardSelection : MonoBehaviour {
                 Destroy(sp.gameObject);
             }
 
-            // remove the piece from original position in the 3d array
+            // remove the piece from original position in the 3d array/logical board
             bm.shogiPieces[selectedPiece.currentX, selectedPiece.currentY, selectedPiece.currentZ] = null;
 
-            // get position of selected piece
+            // set position of selected piece to the new location
             selectedPiece.transform.position = bm.GetCubeCenter(x, y, z);
 
             // set the piece position (for it's own properties)
             selectedPiece.SetPosition(x, y, z);
+
+            // set the pice in the 3d array/logical board
             bm.shogiPieces[x, y, z] = selectedPiece;
             bm.isPlayer1Turn = !bm.isPlayer1Turn;
 
@@ -290,6 +295,7 @@ public class BoardSelection : MonoBehaviour {
         }
 
         // set allowed moves based on the piece type
+        // 3d array of bools (true if spot is valid)
         allowedMoves = BoardManager.Instance.shogiPieces[x, y, z].PossibleMoves();
 
         // set the selected piece

@@ -45,11 +45,17 @@ public class BoardManager : MonoBehaviour {
     // list of all active pieces
     private List<GameObject> activePieces;
 
-    // 3d array of shogi pieces, representing the board
+    // 3d array of shogi pieces, representing the board logically 
     public ShogiPiece[,,] shogiPieces { set; get; }
 
     // 3d array of all shogi spots (not the pieces)
     public GameObject[,,] shogiSpots { set; get; }
+
+    /* Maybe want to use 1 3d array of Board Tiles instead
+     *  BoardTiles being objects with a Tile and Piece
+     *  Use this array to know where pieces are logically
+     *  Track their actual locations using the piece's data members
+     */
 
 
     #endregion
