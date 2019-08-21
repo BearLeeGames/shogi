@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum pieceType { Pawn, Lance, Knight, Bishop, Rook, King, Gold, Silver, PromotedRook, PromotedBishop, PromotedSilver}
+
 public abstract class Piece : MonoBehaviour
 {
+    [SerializeField] public pieceType pt;
     [SerializeField] public int currentX;
     [SerializeField] public int currentY;
     [SerializeField] public int currentZ;
