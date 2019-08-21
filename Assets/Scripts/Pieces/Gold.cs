@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Knight : Piece
+public class Gold : Piece
 {
     [SerializeField]
-    public bool promoted;
 
     private Vector3 piecePosition;
 
@@ -17,23 +16,16 @@ public class Knight : Piece
         this.currentZ = (int)piecePosition.z;
         this.player1 = true;
         this.selected = false;
-        this.promoted = false;
-        
     }
 
     public void Update()
     {
-        
+
         // To do: implement checking if piece is selected, and if space to move to has been selected
         updatePossibleMoves();
 
         // For testing purposes to see knight movement
-        
-    }
 
-    private void promote()
-    {
-        promoted = true;
     }
 
     // Lance can move to any amount of squares ahead of it
@@ -42,21 +34,30 @@ public class Knight : Piece
     {
         List<Vector3> moves = new List<Vector3>();
 
-        int[] x = {1, -1, 0, 0};
-        int[] y = {0, 0, 1, -1};
-        int[] z = {2, 2, 2, 2 };
-
-        for (int i = 0; i < 4; ++i)
+        for (int z = 1; z >=0; --z)
         {
-            int newX = currentX + x[i];
-            int newY = currentY + y[i];
-            int newZ = currentZ + z[i];
-
-            if( newX >=0 && newX <9 && newY >=0 && newY <9 && newZ >=0 && newZ <9)
+            for(int y = 1; y >= -1; --y)
             {
-                moves.Add(new Vector3(newX, newY, newZ));
+                for(int x = -1; x <=1; ++x)
+                {
+                    if (!(x == 0 && y == 0 && z == 0))
+                    {
+                        int newX = currentX + x;
+                        int newY = currentY + y;
+                        int newZ = currentZ + z;
+
+                        if (newX >= 0 && newX < 9 && newY >= 0 && newY < 9 && newZ >= 0 && newZ < 9)
+                        {
+                            moves.Add(new Vector3(newX, newY, newZ));
+                        }
+                    }
+                }
             }
-            
+        }
+
+        if(currentZ - 1 >=0)
+        {
+            moves.Add(new Vector3(currentX, currentY, currentZ - 1));
         }
 
         setPossibleMoves(moves);

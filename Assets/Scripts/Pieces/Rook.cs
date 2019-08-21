@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lance : Piece
+public class Rook : Piece
 {
-    [SerializeField] public bool promoted;
+    [SerializeField]
+    public bool promoted;
 
     private Vector3 piecePosition;
 
@@ -23,7 +24,7 @@ public class Lance : Piece
     {
         // To do: implement checking if piece is selected, and if space to move to has been selected
         updatePossibleMoves();
-        
+
         // For testing purposes to see lance movement
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
@@ -51,14 +52,39 @@ public class Lance : Piece
     {
         List<Vector3> moves = new List<Vector3>();
 
-        for(int i = 1; i < (9 - currentZ); ++i)
+        for (int i = 1; i < (9 - currentZ); ++i)
         {
-            if(currentZ + i < 9)
+            if(currentX + i < 9)
+            {
+                moves.Add(new Vector3(currentX + i, currentY, currentZ));
+            }
+
+            if(currentX - i >= 0)
+            {
+                moves.Add(new Vector3(currentX - i, currentY, currentZ ));
+            }
+
+            if(currentY + i < 9)
+            {
+                moves.Add(new Vector3(currentX, currentY + i, currentZ));
+            }
+
+            if(currentY - i >= 0)
+            {
+                moves.Add(new Vector3(currentX, currentY - i, currentZ));
+            }
+
+            if (currentZ + i < 9)
             {
                 moves.Add(new Vector3(currentX, currentY, currentZ + i));
             }
+
+            if (currentZ - i >= 0)
+            {
+                moves.Add(new Vector3(currentX, currentY, currentZ - i));
+            }
         }
-        
+
         setPossibleMoves(moves);
     }
 }
