@@ -153,13 +153,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27350fa107f9bdc4d8e59790e7e72c61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_boardSize: 11
+  m_boardSize: 7
   m_cubeSize: 1
   m_cubeOffset: 0.5
-  m_tile: {fileID: 0}
-  m_highlight_tile: {fileID: 0}
+  m_tile: {fileID: 1755706636762340, guid: ef0c70ca8b3d84030ae6184dd446496e, type: 2}
+  m_highlight_tile: {fileID: 1838484217363954, guid: 33f1e9311e16748a2ab84c9a7b00a6e7,
+    type: 2}
   m_tileOffset: 0
-  m_piecePrefabs: []
+  m_piecePrefabs:
+  - {fileID: 1795398042131608, guid: 01a45ba807ddeed40ba50bbd987db5e5, type: 2}
+  - {fileID: 1772715985795546, guid: 6c4ee810d4e749247b2a81ca35bb00e4, type: 2}
+  - {fileID: 1331749324861732, guid: 99036dff705588945a0764643b180957, type: 2}
+  - {fileID: 1940044082379938, guid: 7081f6cb018b53f49a88a37b70a44e30, type: 2}
+  - {fileID: 1438883110065958, guid: 7b7b6d4f7f6f39840b911d000464b12a, type: 2}
+  - {fileID: 1028076952872660, guid: 052db18ddb073354da8d9996276b8029, type: 2}
+  - {fileID: 1221237455616110, guid: 4124bd3db2ec2e04181cd4a5773fb668, type: 2}
+  - {fileID: 1818068916768454, guid: a67a456b79b84ee45ae7c212a7647ca1, type: 2}
   isPlayer1Turn: 1
 --- !u!1 &1377303262
 GameObject:

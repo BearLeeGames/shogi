@@ -16,6 +16,7 @@ namespace Game
          */
         #region Data Members
 
+        // this is (0, 0, 0) to (7, 7 7), but pieces will be at (-3, -3, -3) to (3, 3, 3)
         BoardTile[,,] m_board;
         [Header("Board information")]
         [SerializeField] [ReadOnly] int m_boardSize = 7;
@@ -63,6 +64,7 @@ namespace Game
         }
 
         /* set which side the pieces are spawning and which direction they're facing
+         * this is relative to the logical board (not their physical locations)
          *
          * Params:
          *  1. isPlayer1 - determines which player
@@ -75,31 +77,27 @@ namespace Game
          *  2. q - set which direction piece should face
          *
          */
-         void setPlayerSide(bool isPlayer1, bool isPawn, out int z, out Quaternion q)
+         void SetPlayerSide(bool isPlayer1, bool isPawn, out int z, out Quaternion q)
         {
-            // distance from middle (0, 0, 0) to outer edges
-            // i.e. board size 7, radius is 3/-3
-            int radius = m_boardSize / 2;
-
             // quaternion.identity means no rotation
             q = Quaternion.identity;
 
             // pawns are in the front (2nd row)
             if (isPawn)
             {
-                z = -radius + 1;
+                z = 1;
             }
             else
             {
                 // otherwise put the pieces in the back (1st row)
-                z = -radius;
+                z = 0;
             }
 
             // set based on player 1 or 2
             if (!isPlayer1)
             {
                 // player 2 is on the other side of the board
-                z *= -1;
+                z = m_boardSize - z - 1;
 
                 // face the other direction (180 flip)
                 q = m_flipDirection;
@@ -118,7 +116,7 @@ namespace Game
          *  Returns:
          *     origin: Vector3 of location where cube center should be 
          */
-        public Vector3 GetCubeCenter(int x, int y, int z)
+        public Vector3 GetPieceCenter(int x, int y, int z)
         {
             // distance from middle (0, 0, 0) to outer edges
             // i.e. board size 7, edge is at 3/-3
@@ -138,7 +136,6 @@ namespace Game
         #endregion
 
 
-        // ----------------------- TO DO --------------------------
 
         /**
          * Any Unity Methods used.
@@ -147,8 +144,12 @@ namespace Game
 
         private void Start()
         {
+            AssignNames();
+
             // DEBUG
-            GenerateBoard(5);
+            GenerateBoard(m_boardSize);
+
+            GenerateStartingPieces();
         }
 
         #endregion
@@ -160,6 +161,28 @@ namespace Game
          */
         #region Constructors
 
+        // assign the list of Shogi Piece prefabs to their string names (just for our own use)
+        private void AssignNames()
+        {
+            m_shogiPiecePrefabs = new Dictionary<string, GameObject>();
+            m_shogiPiecePrefabs.Add("Pawn", m_piecePrefabs[0]);
+            m_shogiPiecePrefabs.Add("Lance", m_piecePrefabs[1]);
+            m_shogiPiecePrefabs.Add("Knight", m_piecePrefabs[2]);
+            m_shogiPiecePrefabs.Add("Silver General", m_piecePrefabs[3]);
+            m_shogiPiecePrefabs.Add("Gold General", m_piecePrefabs[4]);
+            m_shogiPiecePrefabs.Add("Bishop", m_piecePrefabs[5]);
+            m_shogiPiecePrefabs.Add("Rook", m_piecePrefabs[6]);
+            m_shogiPiecePrefabs.Add("King", m_piecePrefabs[7]);
+        }
+
+
+        // ----------------------- TO DO: generate starting board with BoardTiles correctly 
+
+        // instantiates the Piece objects
+        void GenerateStartingPieces()
+        {
+            SpawnPawns();
+        }
         #endregion
 
 
@@ -179,6 +202,8 @@ namespace Game
                 {
                     foreach (int x in Enumerable.Range(0, boardSize))
                     {
+
+                        // TODO: Change this to spawn based on (0, 0, 0) origin
                         m_board[x, y, z] = new BoardTile(
                             Instantiate(m_tile,
                                         new Vector3(x + (x * m_tileOffset), y + (y * m_tileOffset), z + (z * m_tileOffset)),
@@ -219,6 +244,73 @@ namespace Game
          * within this class.
          */
         #region Member Functions
+
+        // spawn a shogi piece on the board
+        // provide index of piece prefab, and xyz coordinate location
+        private void SpawnPiece(string name, int x, int y, int z, Quaternion direction, bool isPlayer1)
+        {
+            GameObject piece = Instantiate(m_shogiPiecePrefabs[name], GetPieceCenter(x, y, z), direction) as GameObject;
+
+            // give the piece a transform and add it to the board
+            piece.transform.SetParent(transform);
+
+            // set position of Piece (not using piece class yet)
+            // piece.setPosition(x, y, z);
+
+            m_board[x, y, z].Piece = piece.GetComponent<Piece>(); // do we GetComponent Piece here?
+            m_board[x, y, z].Piece.setPosition(x, y, z);
+
+            // piece.GetComponent<ShogiPiece>().setPlayer(isPlayer1);
+        }
+
+        void SpawnPawns()
+        {
+             /*
+             *  z = 1 
+             *  .  .  .  .  .  .  .
+             *  .  .  p  p  p  .  .
+             *  .  .  .  .  .  .  .
+             *  p  p  p  p  p  p  p
+             *  .  .  .  .  .  .  .
+             *  .  .  p  p  p  .  .
+             *  .  .  .  .  .  .  .
+             * 
+             * */
+            // z - row, q - direction
+            int z;
+            Quaternion q;
+
+            // spawn top and bottom 3 pawns             
+            for (int x = 2; x < 5; x++)
+            {
+                // -------- PLAYER 1:
+
+                // set the z and q for player 1 (row/direction facing)
+                // isPlayer1, isPawn, output z, output q
+                SetPlayerSide(true, true, out z, out q);
+
+                Debug.Log(x + " " + (m_boardSize - 2) + " " + z);
+
+                // second to last row from the top
+                SpawnPiece("Pawn", x, m_boardSize - 2, z, q, true);
+
+                // second to last row from the bottom
+                SpawnPiece("Pawn", x, 1, z, q, true);
+
+
+                // -------- PLAYER 2:
+
+                // set the z and q for player 2
+                // isPlayer1, isPawn, output z, output q (row/direction facing)
+                SetPlayerSide(false, true, out z, out q);
+
+                // second to last row from the top
+                SpawnPiece("Pawn", x, m_boardSize - 2, z, q, true);
+
+                // second to last row from the bottom
+                SpawnPiece("Pawn", x, 1, z, q, true);
+            }
+        }
 
         #endregion
     }

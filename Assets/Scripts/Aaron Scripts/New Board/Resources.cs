@@ -17,10 +17,10 @@ namespace Game
          * Tile should be readonly while Piece can be changed.
          */
         private GameObject m_tile;
-        private GameObject m_piece;
+        private Piece m_piece;
 
         public GameObject Tile { get { return m_tile; } }
-        public GameObject Piece { get { return m_piece; } set { m_piece = value; } }
+        public Piece Piece { get { return m_piece; } set { m_piece = value; } }
 
         /**
          * Basic constructors for the class
@@ -31,7 +31,7 @@ namespace Game
             m_piece = null;
         }
 
-        public BoardTile(GameObject tile, GameObject piece)
+        public BoardTile(GameObject tile, Piece piece)
         {
             m_tile = tile;
             m_piece = piece;
