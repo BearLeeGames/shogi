@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33863968185846428}
   - component: {fileID: 23126483856632000}
   - component: {fileID: 65334114328975072}
-  - component: {fileID: 114626833414188554}
+  - component: {fileID: 114825159388237270}
   m_Layer: 10
   m_Name: Bishop
   m_TagString: Untagged
@@ -97,7 +97,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114626833414188554
+--- !u!114 &114825159388237270
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,7 +105,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1028076952872660}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 459f9a629ad054cf98a6cc42f76f57b1, type: 3}
+  m_Script: {fileID: 11500000, guid: bf0a077ce88f9d7469e1fb47382b0437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlayer1: 0
+  pt: 0
+  currentX: 0
+  currentY: 0
+  currentZ: 0
+  player1: 0
+  selected: 0
+  possibleMoves: []
+  promoted: 0

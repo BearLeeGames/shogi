@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bishop : ShogiPiece
+public class King2 : ShogiPiece
 {
-    // script for Bishop fields and behaviors
+    // script for King fields ane behaviors
 }
