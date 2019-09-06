@@ -120,15 +120,15 @@ namespace Game
         {
             // distance from middle (0, 0, 0) to outer edges
             // i.e. board size 7, edge is at 3/-3
-            int radius = m_boardSize / 2;
+            float radius = (m_boardSize / 2) - m_cubeOffset;
 
             Vector3 origin = Vector3.zero;
 
             // 7x7x7 board, a piece at [1, 1, 1] in the array is at (-2, -2, -2) in space
             // offset is simply placing the GO in th center
-            origin.x += (m_cubeSize * (x - radius)) + m_cubeOffset;
-            origin.y += (m_cubeSize * (y - radius)) + m_cubeOffset;
-            origin.z += (m_cubeSize * (z - radius)) + m_cubeOffset;
+            origin.x += (m_cubeSize * (x - radius)) + (x * m_tileOffset);
+            origin.y += (m_cubeSize * (y - radius)) + (y * m_tileOffset);
+            origin.z += (m_cubeSize * (z - radius)) + (z * m_tileOffset);
 
             return origin;
         }
@@ -182,6 +182,13 @@ namespace Game
         void GenerateStartingPieces()
         {
             SpawnPawns();
+            SpawnLances();
+            SpawnKnights();
+            SpawnSilverGenerals();
+            SpawnGoldGenerals();
+            SpawnBishops();
+            SpawnRooks();
+            SpawnKings();
         }
         #endregion
 
@@ -206,7 +213,7 @@ namespace Game
                         // TODO: Change this to spawn based on (0, 0, 0) origin
                         m_board[x, y, z] = new BoardTile(
                             Instantiate(m_tile,
-                                        new Vector3(x + (x * m_tileOffset), y + (y * m_tileOffset), z + (z * m_tileOffset)),
+                                        GetPieceCenter(x, y, z),
                                         Quaternion.Euler(0, 0, 0),
                                         this.transform),
                             null);
@@ -289,8 +296,6 @@ namespace Game
                 // isPlayer1, isPawn, output z, output q
                 SetPlayerSide(true, true, out z, out q);
 
-                Debug.Log(x + " " + (m_boardSize - 2) + " " + z);
-
                 // second to last row from the top
                 SpawnPiece("Pawn", x, m_boardSize - 2, z, q, true);
 
@@ -300,16 +305,296 @@ namespace Game
 
                 // -------- PLAYER 2:
 
-                // set the z and q for player 2
-                // isPlayer1, isPawn, output z, output q (row/direction facing)
                 SetPlayerSide(false, true, out z, out q);
 
                 // second to last row from the top
-                SpawnPiece("Pawn", x, m_boardSize - 2, z, q, true);
+                SpawnPiece("Pawn", x, m_boardSize - 2, z, q, false);
 
                 // second to last row from the bottom
-                SpawnPiece("Pawn", x, 1, z, q, true);
+                SpawnPiece("Pawn", x, 1, z, q, false);
             }
+
+            // spawn middle row
+            for (int x = 0; x < m_boardSize; x++)
+            {
+                // -------- PLAYER 1:
+
+                // set the z and q for player 1 (row/direction facing)
+                // isPlayer1, isPawn, output z, output q
+                SetPlayerSide(true, true, out z, out q);
+
+                int middle = (int)(Mathf.Ceil(m_boardSize / 2.0f) - 1);
+
+                SpawnPiece("Pawn", x, middle, z, q, true);
+
+                // -------- PLAYER 2:
+
+                SetPlayerSide(false, true, out z, out q);
+
+                SpawnPiece("Pawn", x, middle, z, q, false);
+            }
+
+        }
+
+        void SpawnLances()
+        {
+            /*
+            *  z = 0
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  l  .  .  .  .  .  l
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            * 
+            * */
+
+            // z - row, q - direction
+            int z;
+            Quaternion q;
+
+
+            // -------- PLAYER 1:
+
+            // set the z and q for player 1 (row/direction facing)
+            // isPlayer1, isPawn, output z, output q
+            SetPlayerSide(true, false, out z, out q);
+
+            int middle = (int)(Mathf.Ceil(m_boardSize / 2.0f) - 1);
+
+            SpawnPiece("Lance", 0, middle, z, q, true);
+            SpawnPiece("Lance", m_boardSize - 1, middle, z, q, true);
+
+            // -------- PLAYER 2:
+
+            SetPlayerSide(false, false, out z, out q);
+            SpawnPiece("Lance", 0, middle, z, q, false);
+            SpawnPiece("Lance", m_boardSize - 1, middle, z, q, false);
+        }
+
+        void SpawnKnights()
+        {
+            /*
+            *  z = 0
+            *  .  .  .  .  .  .  .
+            *  .  k  .  .  .  k  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  k  .  .  .  k  .
+            *  .  .  .  .  .  .  .
+            * 
+            * */
+
+            // z - row, q - direction
+            int z;
+            Quaternion q;
+
+            // -------- PLAYER 1:
+
+            // set the z and q for player 1 (row/direction facing)
+            // isPlayer1, isPawn, output z, output q
+            SetPlayerSide(true, false, out z, out q);
+
+            SpawnPiece("Knight", 1, 1, z, q, true);
+            SpawnPiece("Knight", m_boardSize - 2, 1, z, q, true);
+            SpawnPiece("Knight", 1, m_boardSize - 2, z, q, true);
+            SpawnPiece("Knight", m_boardSize - 2, m_boardSize - 2, z, q, true);
+
+
+            // -------- PLAYER 2:
+
+            SetPlayerSide(false, false, out z, out q);
+
+            SpawnPiece("Knight", 1, 1, z, q, false);
+            SpawnPiece("Knight", m_boardSize - 2, 1, z, q, false);
+            SpawnPiece("Knight", 1, m_boardSize - 2, z, q, false);
+            SpawnPiece("Knight", m_boardSize - 2, m_boardSize - 2, z, q, false);
+
+        }
+
+        void SpawnSilverGenerals()
+        {
+            /*
+            *  z = 0
+            *  (flipped for player 2)
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  s  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  s  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            * 
+            * */
+
+            // z - row, q - direction
+            int z;
+            Quaternion q;
+
+            // -------- PLAYER 1:
+
+            // set the z and q for player 1 (row/direction facing)
+            // isPlayer1, isPawn, output z, output q
+            SetPlayerSide(true, false, out z, out q);
+
+            SpawnPiece("Silver General", m_boardSize - 3, 2, z, q, true);
+            SpawnPiece("Silver General", 2, m_boardSize - 3, z, q, true);
+
+            // -------- PLAYER 2:
+
+            SetPlayerSide(false, false, out z, out q);
+
+            SpawnPiece("Silver General", m_boardSize - 3, m_boardSize - 3, z, q, false);
+            SpawnPiece("Silver General", 2, 2, z, q, false);
+        }
+
+        void SpawnGoldGenerals()
+        {
+            /*
+            *  z = 0
+            *  (flipped for player 2)
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  g  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  g  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            * 
+            * */
+
+            // z - row, q - direction
+            int z;
+            Quaternion q;
+
+            // -------- PLAYER 1:
+
+            // set the z and q for player 1 (row/direction facing)
+            // isPlayer1, isPawn, output z, output q
+            SetPlayerSide(true, false, out z, out q);
+
+            SpawnPiece("Gold General", m_boardSize - 3, m_boardSize - 3, z, q, true);
+            SpawnPiece("Gold General", 2, 2, z, q, true);
+
+            // -------- PLAYER 2:
+
+            SetPlayerSide(false, false, out z, out q);
+
+            SpawnPiece("Gold General", m_boardSize - 3, 2, z, q, false);
+            SpawnPiece("Gold General", 2, m_boardSize - 3, z, q, false);
+        }
+
+        void SpawnBishops()
+        {
+            /*
+            *  z = 0
+            *  (flipped for player 2)
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  b  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            * 
+            * */
+
+            // z - row, q - direction
+            int z;
+            Quaternion q;
+
+            int middle = (int)(Mathf.Ceil(m_boardSize / 2.0f) - 1);
+
+
+            // -------- PLAYER 1:
+
+            // set the z and q for player 1 (row/direction facing)
+            // isPlayer1, isPawn, output z, output q
+            SetPlayerSide(true, false, out z, out q);
+
+            SpawnPiece("Bishop", 1, middle, z, q, true);
+
+            // -------- PLAYER 2:
+
+            SetPlayerSide(false, false, out z, out q);
+
+            SpawnPiece("Bishop", m_boardSize - 2, middle, z, q, false);
+        }
+
+        void SpawnRooks()
+        {
+            /*
+            *  z = 0
+            *  (flipped for player 2)
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  r  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            * 
+            * */
+
+            // z - row, q - direction
+            int z;
+            Quaternion q;
+
+            int middle = (int)(Mathf.Ceil(m_boardSize / 2.0f) - 1);
+
+
+            // -------- PLAYER 1:
+
+            // set the z and q for player 1 (row/direction facing)
+            // isPlayer1, isPawn, output z, output q
+            SetPlayerSide(true, false, out z, out q);
+
+            SpawnPiece("Rook", m_boardSize - 2, middle, z, q, true);
+
+            // -------- PLAYER 2:
+
+            SetPlayerSide(false, false, out z, out q);
+
+            SpawnPiece("Rook", 1, middle, z, q, false);
+        }
+
+        void SpawnKings()
+        {
+            /*
+            *  z = 0
+            *  (flipped for player 2)
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  k  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            *  .  .  .  .  .  .  .
+            * 
+            * */
+
+            // z - row, q - direction
+            int z;
+            Quaternion q;
+
+            int middle = (int)(Mathf.Ceil(m_boardSize / 2.0f) - 1);
+
+
+            // -------- PLAYER 1:
+
+            // set the z and q for player 1 (row/direction facing)
+            // isPlayer1, isPawn, output z, output q
+            SetPlayerSide(true, false, out z, out q);
+
+            SpawnPiece("King", middle, middle, z, q, true);
+
+            // -------- PLAYER 2:
+
+            SetPlayerSide(false, false, out z, out q);
+
+            SpawnPiece("King", middle, middle, z, q, false);
         }
 
         #endregion
