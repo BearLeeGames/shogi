@@ -2,23 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
+// temp
+public enum pieceType { Pawn, Lance, Knight, Bishop, Rook, King, Gold, Silver, PromotedRook, PromotedBishop, PromotedSilver }
 namespace Game
 {
     /// <summary>
-    /// Used as a container to hold the board tile and shogi piece GameObjects
+    /// Used as a container to hold the board tile and shogi piece GameObjects.
     /// </summary>
     public class BoardTile
     {
         /**
          * Data members for tile and piece and the Member properties for said
          * data. They are separeted for consistency and accessibility, where
-         * Tile should be readonly while Piece can be changed.
+         * Tile should be readonly while Piece can be changed. Same story for
+         * position.
          */
+        private Vector3Int m_position;
         private GameObject m_tile;
         private GameObject m_piece;
 
+        public Vector3Int Position { get { return m_position; } }
         public GameObject Tile { get { return m_tile; } }
         public GameObject Piece { get { return m_piece; } set { m_piece = value; } }
 
@@ -27,19 +30,21 @@ namespace Game
          */
         public BoardTile()
         {
-            m_tile = null;
-            m_piece = null;
+            m_position = new Vector3Int();
+            m_tile     = null;
+            m_piece    = null;
         }
 
-        public BoardTile(GameObject tile, GameObject piece)
+        public BoardTile(Vector3Int position, GameObject tile, GameObject piece)
         {
-            m_tile = tile;
-            m_piece = piece;
+            m_position = position;
+            m_tile     = tile;
+            m_piece    = piece;
         }
     }
 
     /// <summary>
-    /// Categories of console logging actions
+    /// Categories of console logging actions.
     /// </summary>
     public enum LogType
     {
@@ -50,7 +55,7 @@ namespace Game
     }
 
     /// <summary>
-    /// Container to hold all logging information for easy printing
+    /// Container to hold all logging information for easy printing.
     /// </summary>
     struct LogEntry
     {
