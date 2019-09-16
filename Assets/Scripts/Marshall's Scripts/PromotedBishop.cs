@@ -15,7 +15,7 @@ public class PromotedBishop : Piece
         this.currentX = (int)piecePosition.x;
         this.currentY = (int)piecePosition.y;
         this.currentZ = (int)piecePosition.z;
-        this.player1 = true;
+        this.isPlayer1 = true;
         this.selected = false;
         this.promoted = false;
     }
@@ -57,71 +57,131 @@ public class PromotedBishop : Piece
             // XZ plane 
 
             // Up-right direction
+
             if (currentX + i < 9 && currentZ + i < 9)
             {
-                moves.Add(new Vector3(currentX + i, currentY, currentZ + i));
-            }
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY, currentZ + i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX + i, currentY, currentZ + i));
 
+                }
+            }
             // Up-left direction
             if (currentX - i >= 0 && currentZ + i < 9)
             {
-                moves.Add(new Vector3(currentX - i, currentY, currentZ + i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY, currentZ + i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX - i, currentY, currentZ + i));
+
+                }
             }
 
             // Down-right direction
             if (currentX + i < 9 && currentZ - i >= 0)
             {
-                moves.Add(new Vector3(currentX + i, currentY, currentZ - i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY, currentZ - i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX + i, currentY, currentZ - i));
+
+                }
             }
 
             // Down-left direction
             if (currentX - i >= 0 && currentZ - i >= 0)
             {
-                moves.Add(new Vector3(currentX - i, currentY, currentZ - i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY, currentZ - i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX - i, currentY, currentZ - i));
+
+                }
             }
 
             // YZ plane
 
             if (currentY + i < 9 && currentZ + i < 9)
             {
-                moves.Add(new Vector3(currentX, currentY + i, currentZ + i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY + i, currentZ + i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY + i, currentZ + i));
+
+                }
             }
 
             if (currentY - i >= 0 && currentZ - i >= 0)
             {
-                moves.Add(new Vector3(currentX, currentY - i, currentZ - i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY - i, currentZ - i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY - i, currentZ - i));
+
+                }
             }
 
             if (currentY + i < 9 && currentZ - i >= 0)
             {
-                moves.Add(new Vector3(currentX, currentY + i, currentZ - i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY + i, currentZ - i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY + i, currentZ - i));
+
+                }
             }
 
             if (currentY - i >= 0 && currentZ + i < 9)
             {
-                moves.Add(new Vector3(currentX, currentY - i, currentZ + i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY - i, currentZ + i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY - i, currentZ + i));
+
+                }
             }
 
             // XY plane
 
             if (currentX + i < 9 && currentY + i < 9)
             {
-                moves.Add(new Vector3(currentX + 1, currentY + i, currentZ));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY + i, currentZ];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX + i, currentY + i, currentZ));
+
+                }
             }
 
             if (currentX - i < 9 && currentY - i >= 0)
             {
-                moves.Add(new Vector3(currentX - 1, currentY - i, currentZ));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY - i, currentZ];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX - i, currentY - i, currentZ));
+
+                }
             }
 
             if (currentX + i < 9 && currentY - i >= 0)
             {
-                moves.Add(new Vector3(currentX + 1, currentY - i, currentZ));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY - i, currentZ];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX + i, currentY - i, currentZ));
+
+                }
             }
 
             if (currentX - i < 9 && currentY + i < 9)
             {
-                moves.Add(new Vector3(currentX - 1, currentY + i, currentZ));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY + i, currentZ];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX - i, currentY + i, currentZ));
+
+                }
             }
 
             // All axis
@@ -129,45 +189,85 @@ public class PromotedBishop : Piece
             // Up-right direction
             if (currentX + i < 9 && currentY + i < 9 && currentZ + i < 9)
             {
-                moves.Add(new Vector3(currentX + i, currentY + i, currentZ + i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY + i, currentZ + i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX + i, currentY + i, currentZ + i));
+
+                }
             }
 
             if (currentX + i < 9 && currentY - i >= 0 && currentZ + i < 9)
             {
-                moves.Add(new Vector3(currentX + i, currentY - i, currentZ + i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY - i, currentZ + i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX + i, currentY - i, currentZ + i));
+
+                }
             }
 
             // Up-left direction
             if (currentX - i >= 0 && currentY + i < 9 && currentZ + i < 9)
             {
-                moves.Add(new Vector3(currentX - i, currentY + i, currentZ + i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY + i, currentZ + i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX - i, currentY + i, currentZ + i));
+
+                }
             }
 
             if (currentX - i >= 0 && currentY - i >= 0 && currentZ + i < 9)
             {
-                moves.Add(new Vector3(currentX - i, currentY - i, currentZ + i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY - i, currentZ + i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX - i, currentY - i, currentZ + i));
+
+                }
             }
 
             // Down-right direction
             if (currentX + i < 9 && currentY + i < 9 && currentZ - i >= 0)
             {
-                moves.Add(new Vector3(currentX + i, currentY + i, currentZ - i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY + i, currentZ - i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX + i, currentY + i, currentZ - i));
+
+                }
             }
 
             if (currentX + i < 9 && currentY - i >= 0 && currentZ - i >= 0)
             {
-                moves.Add(new Vector3(currentX + i, currentY - i, currentZ - i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY - i, currentZ - i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX + i, currentY - i, currentZ - i));
+
+                }
             }
 
             // Down-left direction
             if (currentX - i >= 0 && currentY + i < 9 && currentZ - i >= 0)
             {
-                moves.Add(new Vector3(currentX - i, currentY + i, currentZ - i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY + i, currentZ - i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX - i, currentY + i, currentZ - i));
+
+                }
             }
 
             if (currentX - i >= 0 && currentY - i >= 0 && currentZ - i >= 0)
             {
-                moves.Add(new Vector3(currentX - i, currentY - i, currentZ - i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY - i, currentZ - i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX - i, currentY - i, currentZ - i));
+
+                }
             }
 
         }
@@ -189,7 +289,9 @@ public class PromotedBishop : Piece
             int newY = currentY + y[i];
             int newZ = currentZ + z[i];
 
-            if (newX >= 0 && newX < 9 && newY >= 0 && newY < 9 && newZ >= 0 && newZ < 9)
+            ShogiPiece c = BoardManager.Instance.shogiPieces[newX, newY, newZ];
+
+            if (newX >= 0 && newX < 9 && newY >= 0 && newY < 9 && newZ >= 0 && newZ < 9 && (c == null || c.isPlayer1 != isPlayer1))
             {
                 moves.Add(new Vector3(newX, newY, newZ));
             }

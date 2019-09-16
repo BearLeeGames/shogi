@@ -14,7 +14,7 @@ public class Lance : Piece
         this.currentX = (int)piecePosition.x;
         this.currentY = (int)piecePosition.y;
         this.currentZ = (int)piecePosition.z;
-        this.player1 = true;
+        this.isPlayer1 = true;
         this.selected = false;
         this.promoted = false;
     }
@@ -53,7 +53,8 @@ public class Lance : Piece
 
         for(int i = 1; i < (9 - currentZ); ++i)
         {
-            if(currentZ + i < 9)
+            ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY, currentZ + 1];
+            if (currentZ + i < 9 && (c == null || c.isPlayer1 != isPlayer1))
             {
                 moves.Add(new Vector3(currentX, currentY, currentZ + i));
             }

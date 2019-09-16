@@ -65,13 +65,6 @@ public abstract class ShogiPiece : MonoBehaviour
     }
     #endregion
 
-
-
-
-
-
-
-
 }
 
 // 4.5 3 15

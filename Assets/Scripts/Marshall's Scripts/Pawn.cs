@@ -14,7 +14,7 @@ public class Pawn : Piece
         this.currentX = (int)piecePosition.x;
         this.currentY = (int)piecePosition.y;
         this.currentZ = (int)piecePosition.z;
-        this.player1 = true;
+        this.isPlayer1 = true;
         this.selected = false;
         this.promoted = false;
     }
@@ -44,7 +44,8 @@ public class Pawn : Piece
     public override void updatePossibleMoves()
     {
         List<Vector3> moves = new List<Vector3>();
-        if (currentZ < 9)
+        ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY, currentZ + 1];
+        if (currentZ < 9 && (c == null || c.isPlayer1 != isPlayer1))
         {
             moves.Add(new Vector3(currentX , currentY, currentZ + 1));
         }

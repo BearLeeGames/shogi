@@ -15,7 +15,7 @@ public class Knight : Piece
         this.currentX = (int)piecePosition.x;
         this.currentY = (int)piecePosition.y;
         this.currentZ = (int)piecePosition.z;
-        this.player1 = true;
+        this.isPlayer1 = true;
         this.selected = false;
         this.promoted = false;
         
@@ -52,7 +52,9 @@ public class Knight : Piece
             int newY = currentY + y[i];
             int newZ = currentZ + z[i];
 
-            if( newX >=0 && newX <9 && newY >=0 && newY <9 && newZ >=0 && newZ <9)
+            ShogiPiece c = BoardManager.Instance.shogiPieces[newX, newY, newZ];
+
+            if ( newX >=0 && newX <9 && newY >=0 && newY <9 && newZ >=0 && newZ <9 && (c == null || c.isPlayer1 != isPlayer1))
             {
                 moves.Add(new Vector3(newX, newY, newZ));
             }

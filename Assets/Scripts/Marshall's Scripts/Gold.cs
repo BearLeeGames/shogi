@@ -14,7 +14,7 @@ public class Gold : Piece
         this.currentX = (int)piecePosition.x;
         this.currentY = (int)piecePosition.y;
         this.currentZ = (int)piecePosition.z;
-        this.player1 = true;
+        this.isPlayer1 = true;
         this.selected = false;
     }
 
@@ -46,7 +46,9 @@ public class Gold : Piece
                         int newY = currentY + y;
                         int newZ = currentZ + z;
 
-                        if (newX >= 0 && newX < 9 && newY >= 0 && newY < 9 && newZ >= 0 && newZ < 9)
+                        ShogiPiece c = BoardManager.Instance.shogiPieces[newX, newY, newZ];
+
+                        if (newX >= 0 && newX < 9 && newY >= 0 && newY < 9 && newZ >= 0 && newZ < 9 && (c == null || c.isPlayer1 != isPlayer1))
                         {
                             moves.Add(new Vector3(newX, newY, newZ));
                         }
@@ -57,7 +59,11 @@ public class Gold : Piece
 
         if(currentZ - 1 >=0)
         {
-            moves.Add(new Vector3(currentX, currentY, currentZ - 1));
+            ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY, currentZ -1];
+            if (c == null || c.isPlayer1 != isPlayer1)
+            {
+                moves.Add(new Vector3(currentX, currentY, currentZ - 1));
+            }
         }
 
         setPossibleMoves(moves);

@@ -15,7 +15,7 @@ public class Rook : Piece
         this.currentX = (int)piecePosition.x;
         this.currentY = (int)piecePosition.y;
         this.currentZ = (int)piecePosition.z;
-        this.player1 = true;
+        this.isPlayer1 = true;
         this.selected = false;
         this.promoted = false;
     }
@@ -54,34 +54,59 @@ public class Rook : Piece
 
         for (int i = 1; i < (9 - currentZ); ++i)
         {
-            if(currentX + i < 9)
+            
+            if (currentX + i < 9)
             {
-                moves.Add(new Vector3(currentX + i, currentY, currentZ));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY, currentZ];
+                if(c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX + i, currentY, currentZ));
+                }
             }
 
             if(currentX - i >= 0)
             {
-                moves.Add(new Vector3(currentX - i, currentY, currentZ ));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY, currentZ];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX - i, currentY, currentZ));
+                }
             }
 
             if(currentY + i < 9)
             {
-                moves.Add(new Vector3(currentX, currentY + i, currentZ));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY + i, currentZ];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY + i, currentZ));
+                }
             }
 
             if(currentY - i >= 0)
             {
-                moves.Add(new Vector3(currentX, currentY - i, currentZ));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY - i, currentZ];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX , currentY - i, currentZ));
+                }
             }
 
             if (currentZ + i < 9)
             {
-                moves.Add(new Vector3(currentX, currentY, currentZ + i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY, currentZ + i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY, currentZ + i));
+                }
             }
 
             if (currentZ - i >= 0)
             {
-                moves.Add(new Vector3(currentX, currentY, currentZ - i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY, currentZ - i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY, currentZ - i));
+                }
             }
         }
 

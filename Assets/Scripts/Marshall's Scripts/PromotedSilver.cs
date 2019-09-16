@@ -14,7 +14,7 @@ public class PromotedSilver : Piece
         this.currentX = (int)piecePosition.x;
         this.currentY = (int)piecePosition.y;
         this.currentZ = (int)piecePosition.z;
-        this.player1 = true;
+        this.isPlayer1 = true;
         this.selected = false;
     }
 
@@ -28,7 +28,6 @@ public class PromotedSilver : Piece
 
     }
 
-    // Lance can move to any amount of squares ahead of it
     // To do: implement checking of pieces occupying spaces in front of it using gameboard
     public override void updatePossibleMoves()
     {
@@ -46,7 +45,10 @@ public class PromotedSilver : Piece
                         int newY = currentY + y;
                         int newZ = currentZ + z;
 
-                        if (newX >= 0 && newX < 9 && newY >= 0 && newY < 9 && newZ >= 0 && newZ < 9)
+                        // checks if space is occupied
+                        ShogiPiece c = BoardManager.Instance.shogiPieces[newX, newY, newZ];
+
+                        if ((newX >= 0 && newX < 9 && newY >= 0 && newY < 9 && newZ >= 0 && newZ < 9 && c) && (c == null || c.isPlayer1 != isPlayer1))
                         {
                             moves.Add(new Vector3(newX, newY, newZ));
                         }
@@ -55,9 +57,15 @@ public class PromotedSilver : Piece
             }
         }
 
+        // case of space behind it
+        
         if (currentZ - 1 >= 0)
         {
-            moves.Add(new Vector3(currentX, currentY, currentZ - 1));
+            ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY, currentZ - 1];
+            if (c == null || c.isPlayer1 != isPlayer1)
+            {
+                moves.Add(new Vector3(currentX, currentY, currentZ - 1));
+            }
         }
 
         setPossibleMoves(moves);

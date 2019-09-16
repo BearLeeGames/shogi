@@ -15,7 +15,7 @@ public class PromotedRook : Piece
         this.currentX = (int)piecePosition.x;
         this.currentY = (int)piecePosition.y;
         this.currentZ = (int)piecePosition.z;
-        this.player1 = true;
+        this.isPlayer1 = true;
         this.selected = false;
         this.promoted = false;
     }
@@ -56,32 +56,56 @@ public class PromotedRook : Piece
         {
             if (currentX + i < 9)
             {
-                moves.Add(new Vector3(currentX + i, currentY, currentZ));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY, currentZ];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX + i, currentY, currentZ));
+                }
             }
 
             if (currentX - i >= 0)
             {
-                moves.Add(new Vector3(currentX - i, currentY, currentZ));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY, currentZ];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX - i, currentY, currentZ));
+                }
             }
 
             if (currentY + i < 9)
             {
-                moves.Add(new Vector3(currentX, currentY + i, currentZ));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY + i, currentZ];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY + i, currentZ));
+                }
             }
 
             if (currentY - i >= 0)
             {
-                moves.Add(new Vector3(currentX, currentY - i, currentZ));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY - i, currentZ];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY - i, currentZ));
+                }
             }
 
             if (currentZ + i < 9)
             {
-                moves.Add(new Vector3(currentX, currentY, currentZ + i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY, currentZ + i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY, currentZ + i));
+                }
             }
 
             if (currentZ - i >= 0)
             {
-                moves.Add(new Vector3(currentX, currentY, currentZ - i));
+                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY, currentZ - i];
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY, currentZ - i));
+                }
             }
         }
 
@@ -102,7 +126,9 @@ public class PromotedRook : Piece
             int newY = currentY + y[i];
             int newZ = currentZ + z[i];
 
-            if (newX >= 0 && newX < 9 && newY >= 0 && newY < 9 && newZ >= 0 && newZ < 9)
+
+            ShogiPiece c = BoardManager.Instance.shogiPieces[newX, newY, newZ];
+            if (newX >= 0 && newX < 9 && newY >= 0 && newY < 9 && newZ >= 0 && newZ < 9 && (c == null || c.isPlayer1 != isPlayer1) )
             {
                 moves.Add(new Vector3(newX, newY, newZ));
             }
