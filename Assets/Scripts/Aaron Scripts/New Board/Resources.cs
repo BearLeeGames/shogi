@@ -16,9 +16,11 @@ namespace Game
          * data. They are separeted for consistency and accessibility, where
          * Tile should be readonly while Piece can be changed.
          */
+        private Vector3Int m_position;
         private GameObject m_tile;
         private Piece m_piece;
 
+        public Vector3Int Position { get { return m_position; } }
         public GameObject Tile { get { return m_tile; } }
         public Piece Piece { get { return m_piece; } set { m_piece = value; } }
 
@@ -27,12 +29,14 @@ namespace Game
          */
         public BoardTile()
         {
+            m_position = new Vector3Int();
             m_tile = null;
             m_piece = null;
         }
 
-        public BoardTile(GameObject tile, Piece piece)
+        public BoardTile(Vector3Int position, GameObject tile, Piece piece)
         {
+            m_position = position;
             m_tile = tile;
             m_piece = piece;
         }
