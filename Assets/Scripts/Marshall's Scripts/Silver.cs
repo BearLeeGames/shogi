@@ -31,6 +31,8 @@ public class Silver : Piece
     // To do: implement checking of pieces occupying spaces in front of it using gameboard
     public override void updatePossibleMoves()
     {
+        int boardSize = Game.Board.boardSize;
+
         List<Vector3> moves = new List<Vector3>();
 
         for (int y = 1; y >=-1; --y)
@@ -41,20 +43,28 @@ public class Silver : Piece
                 int newY = currentY + y;
                 int newZ = currentZ + 1;
 
-                ShogiPiece c = BoardManager.Instance.shogiPieces[newX, newY, newZ];
-
-                if (newX >= 0 && newX < 9 && newY >= 0 && newY < 9 && newZ >= 0 && newZ < 9 && (c == null || c.isPlayer1 != isPlayer1))
+                // if within bounds
+                if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= 0 && newZ < boardSize)
                 {
-                    moves.Add(new Vector3(newX, newY, newZ));
+                    Piece c = Game.Board.board[newX, newY, newZ].Piece;
 
-
-                    ShogiPiece c2 = BoardManager.Instance.shogiPieces[newX, newY, newZ-2];
-                    // Adds the circular spaces on back slice, excluding the center
-                    if (!(y==0 && x ==0) && newZ -2 >= 0 && (c2 == null || c2.isPlayer1 != isPlayer1))
+                    // if there is no piece, or it is not our piece
+                    if (c == null || c.isPlayer1 != isPlayer1)
                     {
-                        moves.Add(new Vector3(newX, newY, newZ -2 ));
+                        moves.Add(new Vector3(newX, newY, newZ));
+
+                        if (newZ - 2 >= 0)
+                        {
+                            Piece c2 = Game.Board.board[newX, newY, newZ - 2].Piece;
+                            // Adds the circular spaces on back slice, excluding the center
+                            if (!(y == 0 && x == 0) && (c2 == null || c2.isPlayer1 != isPlayer1))
+                            {
+                                moves.Add(new Vector3(newX, newY, newZ - 2));
+                            }
+                        }
                     }
                 }
+
             }
         }
 

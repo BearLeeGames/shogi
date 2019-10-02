@@ -43,11 +43,16 @@ public class Pawn : Piece
     // To do: implement checking of pieces occupying spaces in front of it using gameboard
     public override void updatePossibleMoves()
     {
+        int boardSize = Game.Board.boardSize;
         List<Vector3> moves = new List<Vector3>();
-        ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY, currentZ + 1];
-        if (currentZ < 9 && (c == null || c.isPlayer1 != isPlayer1))
+
+        if (currentZ + 1 < boardSize)
         {
-            moves.Add(new Vector3(currentX , currentY, currentZ + 1));
+            Piece c = Game.Board.board[currentX, currentY, currentZ + 1].Piece;
+            if (c == null || c.isPlayer1 != isPlayer1)
+            {
+                moves.Add(new Vector3(currentX, currentY, currentZ + 1));
+            }
         }
         setPossibleMoves(moves);
     }

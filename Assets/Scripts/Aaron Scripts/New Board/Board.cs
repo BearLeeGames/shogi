@@ -22,11 +22,11 @@ namespace Game
         #region Data Members
 
         // this is (0, 0, 0) to (7, 7, 7), but pieces will be at (-3, -3, -3) to (3, 3, 3) in space
-        BoardTile[,,] m_board;
-        public static Board m_instance;
+        static public BoardTile[,,] m_board;
+        static Board m_instance;
 
         [Header("Board information")]
-        [SerializeField] [ReadOnly] int m_boardSize = 7;
+        [SerializeField] [ReadOnly] static int m_boardSize = 7;
 
         [Header("Tile information")]
         [SerializeField] [ReadOnly] float m_cubeSize = 1.0f;
@@ -84,6 +84,16 @@ namespace Game
             get { return m_instance; }
         }
 
+        public static BoardTile[,,] board
+        {
+            get { return m_board; }
+        }
+
+         public static int boardSize
+        {
+            get { return m_boardSize; }
+        }
+
         /* set which side the pieces are spawning and which direction they're facing
          * this is relative to the logical board (not their physical locations)
          *
@@ -98,7 +108,7 @@ namespace Game
          *  2. q - set which direction piece should face
          *
          */
-         void SetPlayerSide(bool isPlayer1, bool isPawn, out int z, out Quaternion q)
+        void SetPlayerSide(bool isPlayer1, bool isPawn, out int z, out Quaternion q)
         {
             // quaternion.identity means no rotation
             q = Quaternion.identity;
@@ -142,7 +152,6 @@ namespace Game
             float boardCenterOffsetOrigin;
             float boardCenterOffset;
 
-            int boardSize = m_boardSize;
 
             // If the boardSize an even size, then the center of
             // the board is the edge of the two center cubes.
@@ -166,6 +175,7 @@ namespace Game
 
             return origin;
         }
+
 
         #endregion
 
@@ -200,15 +210,17 @@ namespace Game
         // assign the list of Shogi Piece prefabs to their string names (just for our own use)
         private void AssignNames()
         {
-            m_shogiPiecePrefabs = new Dictionary<string, GameObject>();
-            m_shogiPiecePrefabs.Add("Pawn", m_piecePrefabs[0]);
-            m_shogiPiecePrefabs.Add("Lance", m_piecePrefabs[1]);
-            m_shogiPiecePrefabs.Add("Knight", m_piecePrefabs[2]);
-            m_shogiPiecePrefabs.Add("Silver General", m_piecePrefabs[3]);
-            m_shogiPiecePrefabs.Add("Gold General", m_piecePrefabs[4]);
-            m_shogiPiecePrefabs.Add("Bishop", m_piecePrefabs[5]);
-            m_shogiPiecePrefabs.Add("Rook", m_piecePrefabs[6]);
-            m_shogiPiecePrefabs.Add("King", m_piecePrefabs[7]);
+            m_shogiPiecePrefabs = new Dictionary<string, GameObject>
+            {
+                { "Pawn", m_piecePrefabs[0] },
+                { "Lance", m_piecePrefabs[1] },
+                { "Knight", m_piecePrefabs[2] },
+                { "Silver General", m_piecePrefabs[3] },
+                { "Gold General", m_piecePrefabs[4] },
+                { "Bishop", m_piecePrefabs[5] },
+                { "Rook", m_piecePrefabs[6] },
+                { "King", m_piecePrefabs[7] }
+            };
         }
 
 
@@ -416,9 +428,9 @@ namespace Game
 
         // spawn a shogi piece on the board
         // provide index of piece prefab, and xyz coordinate location
-        private void SpawnPiece(string name, int x, int y, int z, Quaternion direction, bool isPlayer1)
+        private void SpawnPiece(string pieceName, int x, int y, int z, Quaternion direction, bool isPlayer1)
         {
-            GameObject piece = Instantiate(m_shogiPiecePrefabs[name], GetPieceCenter(x, y, z), direction) as GameObject;
+            GameObject piece = Instantiate(m_shogiPiecePrefabs[pieceName], GetPieceCenter(x, y, z), direction) as GameObject;
 
             // give the piece a transform and add it to the board
             piece.transform.SetParent(transform);
@@ -726,7 +738,7 @@ namespace Game
         {
             /*
             *  z = 0
-            *  (flipped for player 2)
+            *  
             *  .  .  .  .  .  .  .
             *  .  .  .  .  .  .  .
             *  .  .  .  .  .  .  .

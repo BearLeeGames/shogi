@@ -23,18 +23,18 @@ public class Lance : Piece
     {
         // To do: implement checking if piece is selected, and if space to move to has been selected
         updatePossibleMoves();
-        
+        Debug.Log(this.piecePosition);
+
         // For testing purposes to see lance movement
-        if (Input.GetKeyDown(KeyCode.Keypad1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             move((int)piecePosition.x, (int)piecePosition.y, (int)piecePosition.z + 1);
-
         }
-        else if (Input.GetKeyDown(KeyCode.Keypad2))
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             move((int)piecePosition.x, (int)piecePosition.y, (int)piecePosition.z + 2);
         }
-        else if (Input.GetKeyDown(KeyCode.Keypad3))
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             move((int)piecePosition.x, (int)piecePosition.y, (int)piecePosition.z + 3);
         }
@@ -49,15 +49,24 @@ public class Lance : Piece
     // To do: implement checking of pieces occupying spaces in front of it using gameboard
     public override void updatePossibleMoves()
     {
+        int boardSize = Game.Board.boardSize;
+
         List<Vector3> moves = new List<Vector3>();
 
-        for(int i = 1; i < (9 - currentZ); ++i)
+        for(int i = 1; i < (boardSize - currentZ); ++i)
         {
-            ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY, currentZ + 1];
-            if (currentZ + i < 9 && (c == null || c.isPlayer1 != isPlayer1))
+            // if within bounds
+            if (currentZ + 1 < boardSize)
             {
-                moves.Add(new Vector3(currentX, currentY, currentZ + i));
+                Piece c = Game.Board.board[currentX, currentY, currentZ + 1].Piece;
+
+                // if there is no piece, or it is not our piece
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY, currentZ + i));
+                }
             }
+
         }
         
         setPossibleMoves(moves);

@@ -23,12 +23,12 @@ public class Knight : Piece
 
     public void Update()
     {
-        
+
         // To do: implement checking if piece is selected, and if space to move to has been selected
         updatePossibleMoves();
 
         // For testing purposes to see knight movement
-        
+
     }
 
     private void promote()
@@ -40,6 +40,8 @@ public class Knight : Piece
     // To do: implement checking of pieces occupying spaces in front of it using gameboard
     public override void updatePossibleMoves()
     {
+        int boardSize = Game.Board.boardSize;
+
         List<Vector3> moves = new List<Vector3>();
 
         int[] x = {1, -1, 0, 0};
@@ -52,11 +54,16 @@ public class Knight : Piece
             int newY = currentY + y[i];
             int newZ = currentZ + z[i];
 
-            ShogiPiece c = BoardManager.Instance.shogiPieces[newX, newY, newZ];
-
-            if ( newX >=0 && newX <9 && newY >=0 && newY <9 && newZ >=0 && newZ <9 && (c == null || c.isPlayer1 != isPlayer1))
+            // if within bounds
+            if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= 0 && newZ < boardSize)
             {
-                moves.Add(new Vector3(newX, newY, newZ));
+                Piece c = Game.Board.board[newX, newY, newZ].Piece;
+
+                // if there is no piece, or it is not our piece
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(newX, newY, newZ));
+                }
             }
             
         }

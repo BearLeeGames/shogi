@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33413264417427192}
   - component: {fileID: 23890664500559550}
   - component: {fileID: 65837713422120544}
-  - component: {fileID: 114671464127119946}
+  - component: {fileID: 114745904166400278}
   m_Layer: 10
   m_Name: Pawn
   m_TagString: Untagged
@@ -97,7 +97,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114671464127119946
+--- !u!114 &114745904166400278
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,14 +105,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1795398042131608}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38b5c8b2dc1b99f4db802b55a063fd37, type: 3}
+  m_Script: {fileID: 11500000, guid: 71bfdbe198039714193785b542ff50f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pt: 0
   currentX: 0
   currentY: 0
   currentZ: 0
-  player1: 0
+  isPlayer1: 0
   selected: 0
   possibleMoves: []
   promoted: 0

@@ -108,11 +108,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9de8cb98c7a2bd4eab16b6b2b1997e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pt: 0
+  pt: 5
   currentX: 0
   currentY: 0
   currentZ: 0
-  player1: 0
+  isPlayer1: 0
   selected: 0
   possibleMoves: []
   piecePosition: {x: 0, y: 0, z: 0}

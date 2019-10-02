@@ -33,6 +33,8 @@ public class King : Piece
     // Update: Change to use for loops
     public override void updatePossibleMoves()
     {
+        int boardSize = Game.Board.boardSize;
+        
         List<Vector3> moves = new List<Vector3>();
 
         int[] x = { -1, 0, 1, -1, 0, 1, -1, 0, 1,
@@ -52,13 +54,19 @@ public class King : Piece
             int newY = currentY + y[i];
             int newZ = currentZ + z[i];
 
-
-            ShogiPiece c = BoardManager.Instance.shogiPieces[newX, newY, newZ];
-
-            if (newX >= 0 && newX < 9 && newY >= 0 && newY < 9 && newZ >= 0 && newZ < 9 && (c == null || c.isPlayer1 != isPlayer1))
+            // if within bounds
+            if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= 0 && newZ < boardSize)
             {
-                moves.Add(new Vector3(newX, newY, newZ));
+                Piece c = Game.Board.board[newX, newY, newZ].Piece;
+
+                // if there is no piece, or it is not our piece
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(newX, newY, newZ));
+                }
             }
+
+
         }
 
         setPossibleMoves(moves);

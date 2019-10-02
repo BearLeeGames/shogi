@@ -108,11 +108,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38b5c8b2dc1b99f4db802b55a063fd37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pt: 0
+  pt: 1
   currentX: 0
   currentY: 0
   currentZ: 0
-  player1: 0
+  isPlayer1: 0
   selected: 0
   possibleMoves: []
   promoted: 0
