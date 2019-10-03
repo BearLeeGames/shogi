@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.49641287, b: 0.5748173, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -122,6 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 292780181}
   - component: {fileID: 292780182}
+  - component: {fileID: 292780183}
   m_Layer: 0
   m_Name: ShogiBoard
   m_TagString: Untagged
@@ -153,13 +154,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27350fa107f9bdc4d8e59790e7e72c61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_boardSize: 7
   m_cubeSize: 1
   m_cubeOffset: 0.5
   m_tile: {fileID: 1755706636762340, guid: ef0c70ca8b3d84030ae6184dd446496e, type: 2}
   m_highlight_tile: {fileID: 1838484217363954, guid: 33f1e9311e16748a2ab84c9a7b00a6e7,
     type: 2}
-  m_tileOffset: 0.5
   m_piecePrefabs:
   - {fileID: 1795398042131608, guid: 01a45ba807ddeed40ba50bbd987db5e5, type: 2}
   - {fileID: 1772715985795546, guid: 6c4ee810d4e749247b2a81ca35bb00e4, type: 2}
@@ -169,7 +168,21 @@ MonoBehaviour:
   - {fileID: 1028076952872660, guid: 052db18ddb073354da8d9996276b8029, type: 2}
   - {fileID: 1221237455616110, guid: 4124bd3db2ec2e04181cd4a5773fb668, type: 2}
   - {fileID: 1818068916768454, guid: a67a456b79b84ee45ae7c212a7647ca1, type: 2}
-  isPlayer1Turn: 1
+--- !u!114 &292780183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 292780180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a1ec9dbe3a5e486b9a6f1b08204fbe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverMaterial: {fileID: 2100000, guid: 503336d8231b6af4695cb3d4d997479f, type: 2}
+  restingMaterial: {fileID: 2100000, guid: ef229fb7323b44a758ce4c16f136eb6f, type: 2}
+  rangeMaterial: {fileID: 2100000, guid: 7ed1a8a851d1b4b04b9fa125c735712b, type: 2}
+  rangeCube: {fileID: 1838484217363954, guid: 33f1e9311e16748a2ab84c9a7b00a6e7, type: 2}
 --- !u!1 &1377303262
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,7 +320,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1487463895}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23613782971808950}
   - component: {fileID: 65503133276234908}
   - component: {fileID: 114769300152028474}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: Lance
   m_TagString: Untagged
   m_Icon: {fileID: 0}

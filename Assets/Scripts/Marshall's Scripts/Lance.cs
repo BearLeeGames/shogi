@@ -23,7 +23,6 @@ public class Lance : Piece
     {
         // To do: implement checking if piece is selected, and if space to move to has been selected
         updatePossibleMoves();
-        Debug.Log(this.piecePosition);
 
         // For testing purposes to see lance movement
         if (Input.GetKeyDown(KeyCode.Alpha1))

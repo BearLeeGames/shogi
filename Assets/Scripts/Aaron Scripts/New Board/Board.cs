@@ -35,7 +35,7 @@ namespace Game
         [Header("Tile prefab and information")]
         [SerializeField] [Tooltip("The tile prefab")] GameObject m_tile;
         [SerializeField] [Tooltip("The highlighted tile prefab")] GameObject m_highlight_tile;
-        [SerializeField] [Tooltip("The distance between tiles")] float m_tileOffset;
+        [SerializeField] [Tooltip("The distance between tiles")] static float m_tileOffset;
 
         [Header("Piece prefab and information")]
         [SerializeField] [Tooltip("List of piece prefabs")] List<GameObject> m_piecePrefabs;
@@ -48,7 +48,7 @@ namespace Game
         Quaternion m_flipDirection = Quaternion.Euler(0, 180, 0);
 
         // who's turn is it
-        public bool isPlayer1Turn = true;
+        static bool m_isPlayer1Turn = true;
 
         #endregion
 
@@ -89,10 +89,26 @@ namespace Game
             get { return m_board; }
         }
 
-         public static int boardSize
+        public static int boardSize
         {
             get { return m_boardSize; }
         }
+
+        public static bool isPlayer1Turn
+        {
+            get { return m_isPlayer1Turn; }
+        }
+
+        public static float tileOffset
+        {
+            get { return m_tileOffset; }
+        }
+
+        public static void changeTurns()
+        {
+            m_isPlayer1Turn = !m_isPlayer1Turn;
+        }
+
 
         /* set which side the pieces are spawning and which direction they're facing
          * this is relative to the logical board (not their physical locations)
@@ -147,25 +163,10 @@ namespace Game
          *  Returns:
          *     origin: Vector3 of location where cube center should be 
          */
-        public Vector3 GetPieceCenter(int x, int y, int z)
+        public static Vector3 GetPieceCenter(int x, int y, int z)
         {
-            float boardCenterOffsetOrigin;
-            float boardCenterOffset;
-
-
-            // If the boardSize an even size, then the center of
-            // the board is the edge of the two center cubes.
-            // Otherwise the center is the central cube.
-            if (boardSize % 2 == 0)
-            {
-                boardCenterOffsetOrigin = -(boardSize / 2 * (1 + m_tileOffset)) + 0.5f;
-                boardCenterOffset       = 1 + m_tileOffset;
-            }
-            else
-            {
-                boardCenterOffsetOrigin = -(Mathf.Floor(boardSize / 2) * (1 + m_tileOffset));
-                boardCenterOffset       = 1 + m_tileOffset;
-            }
+            float boardCenterOffsetOrigin = GetCenterOffsetOrigin();
+            float boardCenterOffset = 1 + m_tileOffset;
 
             Vector3 origin = Vector3.zero;
 
@@ -174,6 +175,40 @@ namespace Game
             origin.z += boardCenterOffsetOrigin + (z * boardCenterOffset);
 
             return origin;
+        }
+
+        /*
+         * Calculate where the origin of the board is in space
+         */
+        public static float GetCenterOffsetOrigin()
+        {
+
+            // If the boardSize an even size, then the center of
+            // the board is the edge of the two center cubes.
+            // Otherwise the center is the central cube.
+            if (boardSize % 2 == 0)
+            {
+                return -(boardSize / 2 * (1 + m_tileOffset)) + 0.5f;
+            }
+            else
+            {
+                return -(Mathf.Floor(boardSize / 2) * (1 + m_tileOffset));
+            }
+        }
+
+
+        /* Convert spacial coordinates to logical coordinates (3D array)
+         * Essentially reverses the GetPieceCenter function
+         */
+        public static Vector3 SpaceToArrayCoordinates(int x, int y, int z)
+        {
+            float offset = GetCenterOffsetOrigin();
+
+            float arrayX = (x - offset) / (1 + tileOffset);
+            float arrayY = (y - offset) / (1 + tileOffset);
+            float arrayZ = (z - offset) / (1 + tileOffset);
+
+            return new Vector3(arrayX, arrayY, arrayZ);
         }
 
 
