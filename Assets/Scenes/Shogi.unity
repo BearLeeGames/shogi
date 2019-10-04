@@ -138,7 +138,7 @@ Transform:
   m_GameObject: {fileID: 292780180}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_cubeSize: 1
   m_cubeOffset: 0.5
   m_tile: {fileID: 1755706636762340, guid: ef0c70ca8b3d84030ae6184dd446496e, type: 2}
-  m_highlight_tile: {fileID: 1838484217363954, guid: 33f1e9311e16748a2ab84c9a7b00a6e7,
+  m_highlightTile: {fileID: 1838484217363954, guid: 33f1e9311e16748a2ab84c9a7b00a6e7,
     type: 2}
   m_piecePrefabs:
   - {fileID: 1795398042131608, guid: 01a45ba807ddeed40ba50bbd987db5e5, type: 2}

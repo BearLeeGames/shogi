@@ -145,29 +145,35 @@ namespace Game
                 mouseY = (int)arrayCoordinates.y;
                 mouseZ = (int)arrayCoordinates.z;
 
-                Debug.Log("hovering over: " + mouseX + " " + mouseY + " " + mouseZ);
+                //Debug.Log("hovering over: " + mouseX + " " + mouseY + " " + mouseZ);
 
                 // Note: game is currently only hovering over the colored block (smaller) and not the surrounding block (fills entire space)
                 // the surrounding block sometimes pushes your cursor over to the next block, since it perfectly fills the space to the point where (1, 1.75) becomes (1, 2)
 
                 Piece currentHoveredPiece = Game.Board.board[mouseX, mouseY, mouseZ].Piece;
 
-                // if there is a piece there
-                if (currentHoveredPiece != null)
+                // no piece selected yet
+                if (selectedPiece == null)
                 {
-                    // this if should always be true currently, with only board spots with pieces in them being shown
-
-                    // change the design of hovered cubes
-                    HandleHoverCube(mouseX, mouseY, mouseZ);
+                    // just highlight pieces
+                    if (currentHoveredPiece != null)
+                    {
+                        // change the design of hovered cubes
+                        HandleHoverCube(mouseX, mouseY, mouseZ);
+                    }
                 }
 
-                // if we have a piece selected, and we're hovering over a range cube
-                else if (selectedPiece != null && CheckMove(selectedPiece.getPossibleMoves(), new Vector3(mouseX, mouseY, mouseZ)))
+                // a piece has been selected
+                else
                 {
-                    Debug.Log("hovering over range cube");
-                    // change the design of the hovered range cube
-                    HandleHoverCube(mouseX, mouseY, mouseZ);
+                    // highlight range cubes
+                    if (CheckMove(selectedPiece.getPossibleMoves(), new Vector3(mouseX, mouseY, mouseZ)))
+                    {
+                        Debug.Log("range cube yeah");
+                        HandleHoverCube(mouseX, mouseY, mouseZ);
+                    }
                 }
+
             }
 
             else
@@ -198,6 +204,7 @@ namespace Game
         // handle the material of the cubes being hovered over
         private void HandleHoverCube(int currentX, int currentY, int currentZ)
         {
+
             // if the hovered spot is different from the previously hovered spot
             if (hoveredSpot != Game.Board.board[currentX, currentY, currentZ].Tile)
             {
@@ -229,17 +236,17 @@ namespace Game
         // check what you've clicked on
         private void CheckClick()
         {
+
+            int boardSize = Game.Board.boardSize;
+
             // check for click
             if (Input.GetMouseButtonDown(0))
             {
 
-                float boardEdge = Game.Board.GetCenterOffsetOrigin();
-
                 Debug.Log("Clicked on " + mouseX + mouseY + mouseZ);
 
-                // if you clicked within the board
-                if (mouseX >= boardEdge && mouseY >= boardEdge && mouseZ >= boardEdge &&
-                    mouseX <= -boardEdge && mouseY <= -boardEdge && mouseZ <= -boardEdge)
+                // if you clicked within the board (3d array coordinates)
+                if (mouseX >= 0 && mouseX < Game.Board.boardSize && mouseY >= 0 && mouseY < boardSize && mouseZ >= 0 && mouseZ < boardSize)
                 {
                     // if you haven't clicked on a piece already, click on it
                     if (selectedPiece == null)
@@ -309,7 +316,7 @@ namespace Game
 
             }
             // hide the range cubes and reset selectedPiece
-            HideRange();
+            HideRange(selectedPiece.getPossibleMoves());
             selectedPiece = null;
         }
 
@@ -374,16 +381,33 @@ namespace Game
                 GameObject rangeTile = Game.Board.board[(int)moves[i].x, (int)moves[i].y, (int)moves[i].z].Tile;
 
                 rangeTile.GetComponent<Renderer>().material = rangeMaterial;
+
+                // this is the PieceLayer, which is hoverable
+                rangeTile.layer = 9;
+                rangeTile.tag = "Range";
             }
         }
 
 
         // for each rangecube, set active to false
-        private void HideRange()
+        private void HideRange(List<Vector3> moves)
         {
-            foreach (GameObject cube in rangeCubes)
+            // NOTE: use this if we use rangeCube objects
+            //foreach (GameObject cube in rangeCubes)
+            //{
+            //    cube.SetActive(false);
+            //}
+
+            // if not, change material of tiles back to normal
+            for (int i = 0; i < moves.Count; i++)
             {
-                cube.SetActive(false);
+                // get the tile used for the range indicator
+                GameObject rangeTile = Game.Board.board[(int)moves[i].x, (int)moves[i].y, (int)moves[i].z].Tile;
+
+                rangeTile.GetComponent<Renderer>().material = restingMaterial;
+
+                rangeTile.layer = 0;
+                rangeTile.tag = "Untagged";
             }
         }
 

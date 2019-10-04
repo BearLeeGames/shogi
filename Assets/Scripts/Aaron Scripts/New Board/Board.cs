@@ -30,12 +30,12 @@ namespace Game
 
         [Header("Tile information")]
         [SerializeField] [ReadOnly] float m_cubeSize = 1.0f;
-        [SerializeField] [ReadOnly] public float m_cubeOffset = 0.5f;
+        [SerializeField] [ReadOnly] float m_cubeOffset = 0.5f;
 
         [Header("Tile prefab and information")]
         [SerializeField] [Tooltip("The tile prefab")] GameObject m_tile;
-        [SerializeField] [Tooltip("The highlighted tile prefab")] GameObject m_highlight_tile;
-        [SerializeField] [Tooltip("The distance between tiles")] static float m_tileOffset;
+        [SerializeField] [Tooltip("The highlighted tile prefab")] GameObject m_highlightTile;
+        [SerializeField] [Tooltip("The distance between tiles")] static float m_tileOffset = 0f;
 
         [Header("Piece prefab and information")]
         [SerializeField] [Tooltip("List of piece prefabs")] List<GameObject> m_piecePrefabs;
@@ -166,7 +166,7 @@ namespace Game
         public static Vector3 GetPieceCenter(int x, int y, int z)
         {
             float boardCenterOffsetOrigin = GetCenterOffsetOrigin();
-            float boardCenterOffset = 1 + m_tileOffset;
+            float boardCenterOffset = 1 + tileOffset;
 
             Vector3 origin = Vector3.zero;
 
@@ -188,11 +188,11 @@ namespace Game
             // Otherwise the center is the central cube.
             if (boardSize % 2 == 0)
             {
-                return -(boardSize / 2 * (1 + m_tileOffset)) + 0.5f;
+                return -(boardSize / 2 * (1 + tileOffset)) + 0.5f;
             }
             else
             {
-                return -(Mathf.Floor(boardSize / 2) * (1 + m_tileOffset));
+                return -(Mathf.Floor(boardSize / 2) * (1 + tileOffset));
             }
         }
 
@@ -228,7 +228,7 @@ namespace Game
 
             AssignNames();
 
-            GenerateBoard(m_boardSize);
+            GenerateBoard();
 
             GenerateStartingPieces();
         }
@@ -287,7 +287,7 @@ namespace Game
          * m_tileOffset (distance between tiles) and saves the
          * generated board into m_board.
          */
-        public void GenerateBoard(int boardSize)
+        public void GenerateBoard()
         {
             if (m_board != null)
                 DestroyBoard();
@@ -475,8 +475,7 @@ namespace Game
 
             m_board[x, y, z].Piece = piece.GetComponent<Piece>(); // do we GetComponent Piece here?
             m_board[x, y, z].Piece.setPosition(x, y, z);
-
-            // piece.GetComponent<ShogiPiece>().setPlayer(isPlayer1);
+            m_board[x, y, z].Piece.setPlayer(isPlayer1);
         }
 
         void SpawnPawns()
