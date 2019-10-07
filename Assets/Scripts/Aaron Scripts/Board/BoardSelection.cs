@@ -169,7 +169,6 @@ namespace Game
                     // highlight range cubes
                     if (CheckMove(selectedPiece.getPossibleMoves(), new Vector3(mouseX, mouseY, mouseZ)))
                     {
-                        Debug.Log("range cube yeah");
                         HandleHoverCube(mouseX, mouseY, mouseZ);
                     }
                 }
@@ -243,7 +242,7 @@ namespace Game
             if (Input.GetMouseButtonDown(0))
             {
 
-                Debug.Log("Clicked on " + mouseX + mouseY + mouseZ);
+                //Debug.Log("Clicked on " + mouseX + mouseY + mouseZ);
 
                 // if you clicked within the board (3d array coordinates)
                 if (mouseX >= 0 && mouseX < Game.Board.boardSize && mouseY >= 0 && mouseY < boardSize && mouseZ >= 0 && mouseZ < boardSize)
@@ -257,7 +256,7 @@ namespace Game
                     }
                     else
                     {
-                        Debug.Log("piece already clicked on, move piece");
+                        Debug.Log("piece already clicked on, move or cancel");
                         // go ahead and move the piece
                         MoveShogiPiece(mouseX, mouseY, mouseZ);
                     }
@@ -265,6 +264,13 @@ namespace Game
                 else
                 {
                     // deactivate the selected piece here
+                    if (selectedPiece != null)
+                    {
+                        // hide the range cubes and reset selectedPiece
+                        HideRange(selectedPiece.getPossibleMoves());
+                        selectedPiece = null;
+                    }
+
                 }
 
             }

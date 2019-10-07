@@ -58,7 +58,7 @@ public class PromotedRook : Piece
         {
             if (currentX + i < boardSize)
             {
-                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY, currentZ];
+                Piece c = Game.Board.board[currentX + i, currentY, currentZ].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
                 {
                     moves.Add(new Vector3(currentX + i, currentY, currentZ));
@@ -67,7 +67,7 @@ public class PromotedRook : Piece
 
             if (currentX - i >= 0)
             {
-                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY, currentZ];
+                Piece c = Game.Board.board[currentX - i, currentY, currentZ].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
                 {
                     moves.Add(new Vector3(currentX - i, currentY, currentZ));
@@ -76,7 +76,7 @@ public class PromotedRook : Piece
 
             if (currentY + i < boardSize)
             {
-                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY + i, currentZ];
+                Piece c = Game.Board.board[currentX, currentY + i, currentZ].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
                 {
                     moves.Add(new Vector3(currentX, currentY + i, currentZ));
@@ -85,7 +85,7 @@ public class PromotedRook : Piece
 
             if (currentY - i >= 0)
             {
-                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY - i, currentZ];
+                Piece c = Game.Board.board[currentX, currentY - i, currentZ].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
                 {
                     moves.Add(new Vector3(currentX, currentY - i, currentZ));
@@ -94,7 +94,7 @@ public class PromotedRook : Piece
 
             if (currentZ + i < boardSize)
             {
-                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY, currentZ + i];
+                Piece c = Game.Board.board[currentX, currentY, currentZ + i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
                 {
                     moves.Add(new Vector3(currentX, currentY, currentZ + i));
@@ -103,7 +103,7 @@ public class PromotedRook : Piece
 
             if (currentZ - i >= 0)
             {
-                ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY, currentZ - i];
+                Piece c = Game.Board.board[currentX, currentY, currentZ - i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
                 {
                     moves.Add(new Vector3(currentX, currentY, currentZ - i));
@@ -129,7 +129,7 @@ public class PromotedRook : Piece
             int newZ = currentZ + z[i];
 
 
-            ShogiPiece c = BoardManager.Instance.shogiPieces[newX, newY, newZ];
+            Piece c = Game.Board.board[newX, newY, newZ].Piece;
             if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= 0 && newZ < boardSize && (c == null || c.isPlayer1 != isPlayer1) )
             {
                 moves.Add(new Vector3(newX, newY, newZ));

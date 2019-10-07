@@ -49,7 +49,7 @@ public class Pawn : Piece
 
         if (isPlayer1)
         {
-            if (currentZ + 1 < boardSize)
+            if (currentZ + 1 < boardSize && currentZ + 1 >= 0)
             {
                 Piece c = Game.Board.board[currentX, currentY, currentZ + 1].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -60,7 +60,7 @@ public class Pawn : Piece
         }
         else
         {
-            if (currentZ - 1 < boardSize)
+            if (currentZ - 1 < boardSize && currentZ - 1 >= 0)
             {
                 Piece c = Game.Board.board[currentX, currentY, currentZ - 1].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)

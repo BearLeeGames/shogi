@@ -70,7 +70,7 @@ public class Bishop : Piece
                 }
             }
             // Up-left direction
-            if (currentX - i >= -3 && currentZ + i < boardSize)
+            if (currentX - i >= 0 && currentZ + i < boardSize)
             {
                 Piece c = Game.Board.board[currentX - i, currentY, currentZ + i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -81,7 +81,7 @@ public class Bishop : Piece
             }
 
             // Down-right direction
-            if (currentX + i < boardSize && currentZ - i >= -3)
+            if (currentX + i < boardSize && currentZ - i >= 0)
             {
                 Piece c = Game.Board.board[currentX + i, currentY, currentZ - i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -92,7 +92,7 @@ public class Bishop : Piece
             }
 
             // Down-left direction
-            if (currentX - i >= -3 && currentZ - i >= -3)
+            if (currentX - i >= 0 && currentZ - i >= 0)
             {
                 Piece c = Game.Board.board[currentX - i, currentY, currentZ - i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -114,7 +114,7 @@ public class Bishop : Piece
                 }
             }
 
-            if (currentY - i >= -3 && currentZ - i >= -3)
+            if (currentY - i >= 0 && currentZ - i >= 0)
             {
                 Piece c = Game.Board.board[currentX, currentY - i, currentZ - i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -124,7 +124,7 @@ public class Bishop : Piece
                 }
             }
 
-            if (currentY + -3 < boardSize && currentZ - i >= -3)
+            if (currentY + 0 < boardSize && currentZ - i >= 0)
             {
                 Piece c = Game.Board.board[currentX, currentY + i, currentZ - i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -134,7 +134,7 @@ public class Bishop : Piece
                 }
             }
 
-            if (currentY - i >= -3 && currentZ + i < boardSize)
+            if (currentY - i >= 0 && currentZ + i < boardSize)
             {
                 Piece c = Game.Board.board[currentX, currentY - i, currentZ + i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -156,7 +156,7 @@ public class Bishop : Piece
                 }
             }
 
-            if (currentX - i >= -3 && currentY - i >= -3)
+            if (currentX - i >= 0 && currentY - i >= 0)
             {
                 Piece c = Game.Board.board[currentX - i, currentY - i, currentZ].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -166,7 +166,7 @@ public class Bishop : Piece
                 }
             }
 
-            if (currentX + i < boardSize && currentY - i >= -3)
+            if (currentX + i < boardSize && currentY - i >= 0)
             {
                 Piece c = Game.Board.board[currentX + i, currentY - i, currentZ].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -176,7 +176,7 @@ public class Bishop : Piece
                 }
             }
 
-            if (currentX - i >= -3 && currentY + i < boardSize)
+            if (currentX - i >= 0 && currentY + i < boardSize)
             {
                 Piece c = Game.Board.board[currentX - i, currentY + i, currentZ].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -199,7 +199,7 @@ public class Bishop : Piece
                 }
             }
 
-            if(currentX + i < boardSize && currentY - i >= -3 && currentZ + i < boardSize)
+            if(currentX + i < boardSize && currentY - i >= 0 && currentZ + i < boardSize)
             {
                 Piece c = Game.Board.board[currentX + i, currentY - i, currentZ + i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -210,7 +210,7 @@ public class Bishop : Piece
             }
 
             // Up-left direction
-            if (currentX - i >= -3 && currentY + i < boardSize && currentZ + i < boardSize)
+            if (currentX - i >= 0 && currentY + i < boardSize && currentZ + i < boardSize)
             {
                 Piece c = Game.Board.board[currentX - i, currentY + i, currentZ + i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -220,7 +220,7 @@ public class Bishop : Piece
                 }
             }
 
-            if (currentX - i >= -3 && currentY - i >= -3 && currentZ + i < boardSize)
+            if (currentX - i >= 0 && currentY - i >= 0 && currentZ + i < boardSize)
             {
                 Piece c = Game.Board.board[currentX - i, currentY - i, currentZ + i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -231,7 +231,7 @@ public class Bishop : Piece
             }
 
             // Down-right direction
-            if (currentX + i < boardSize && currentY + i < boardSize && currentZ - i >= -3)
+            if (currentX + i < boardSize && currentY + i < boardSize && currentZ - i >= 0)
             {
                 Piece c = Game.Board.board[currentX + i, currentY + i, currentZ - i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -241,7 +241,7 @@ public class Bishop : Piece
                 }
             }
 
-            if (currentX + i < boardSize && currentY - i >= -3 && currentZ - i >= -3)
+            if (currentX + i < boardSize && currentY - i >= 0 && currentZ - i >= 0)
             {
                 Piece c = Game.Board.board[currentX + i, currentY - i, currentZ - i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -252,7 +252,7 @@ public class Bishop : Piece
             }
 
             // Down-left direction
-            if (currentX - i >= -3 && currentY + i < boardSize && currentZ - i >= -3)
+            if (currentX - i >= 0 && currentY + i < boardSize && currentZ - i >= 0)
             {
                 Piece c = Game.Board.board[currentX - i, currentY + i, currentZ - i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -262,7 +262,7 @@ public class Bishop : Piece
                 }
             }
 
-            if (currentX - i >= -3 && currentY - i >= -3 && currentZ - i >= -3)
+            if (currentX - i >= 0 && currentY - i >= 0 && currentZ - i >= 0)
             {
                 Piece c = Game.Board.board[currentX - i, currentY - i, currentZ - i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)

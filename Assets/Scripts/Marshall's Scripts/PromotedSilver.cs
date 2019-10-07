@@ -49,7 +49,7 @@ public class PromotedSilver : Piece
                         int newZ = currentZ + z;
 
                         // checks if space is occupied
-                        ShogiPiece c = BoardManager.Instance.shogiPieces[newX, newY, newZ];
+                        Piece c = Game.Board.board[newX, newY, newZ].Piece;
 
                         if ((newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= 0 && newZ < boardSize && c) && (c == null || c.isPlayer1 != isPlayer1))
                         {
@@ -64,7 +64,7 @@ public class PromotedSilver : Piece
         
         if (currentZ - 1 >= 0)
         {
-            ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY, currentZ - 1];
+            Piece c = Game.Board.board[currentX, currentY, currentZ - 1].Piece;
             if (c == null || c.isPlayer1 != isPlayer1)
             {
                 moves.Add(new Vector3(currentX, currentY, currentZ - 1));

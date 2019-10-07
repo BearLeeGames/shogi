@@ -47,7 +47,7 @@ public class Silver : Piece
                     int newZ = currentZ + 1;
 
                     // if within bounds
-                    if (newX >= -3 && newX < boardSize && newY >= -3 && newY < boardSize && newZ >= -3 && newZ < boardSize)
+                    if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= 0 && newZ < boardSize)
                     {
                         Piece c = Game.Board.board[newX, newY, newZ].Piece;
 
@@ -56,7 +56,7 @@ public class Silver : Piece
                         {
                             moves.Add(new Vector3(newX, newY, newZ));
 
-                            if (newZ - 2 >= -3)
+                            if (newZ - 2 >= 0)
                             {
                                 Piece c2 = Game.Board.board[newX, newY, newZ - 2].Piece;
                                 // Adds the circular spaces on back slice, excluding the center
@@ -82,7 +82,7 @@ public class Silver : Piece
                     int newZ = currentZ - 1;
 
                     // if within bounds
-                    if (newX >= -3 && newX < boardSize && newY >= -3 && newY < boardSize && newZ >= -3 && newZ < boardSize)
+                    if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= -3 && newZ < boardSize)
                     {
                         Piece c = Game.Board.board[newX, newY, newZ].Piece;
 
@@ -91,7 +91,7 @@ public class Silver : Piece
                         {
                             moves.Add(new Vector3(newX, newY, newZ));
 
-                            if (newZ + 2 >= -3)
+                            if (newZ + 2 >= 0)
                             {
                                 Piece c2 = Game.Board.board[newX, newY, newZ - 2].Piece;
                                 // Adds the circular spaces on back slice, excluding the center

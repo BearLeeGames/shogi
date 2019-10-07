@@ -50,7 +50,7 @@ public class Gold : Piece
                             int newZ = currentZ + z;
 
                             // if within bounds
-                            if (newX >= -3 && newX < boardSize && newY >= -3 && newY < boardSize && newZ >= -3 && newZ < boardSize)
+                            if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= -3 && newZ < boardSize)
                             {
                                 Piece c = Game.Board.board[newX, newY, newZ].Piece;
 
@@ -66,7 +66,7 @@ public class Gold : Piece
                 }
             }
 
-            if (currentZ - 1 >= -3)
+            if (currentZ - 1 >= 0)
             {
                 Piece c = Game.Board.board[currentX, currentY, currentZ - 1].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -90,7 +90,7 @@ public class Gold : Piece
                             int newZ = currentZ - z;
 
                             // if within bounds
-                            if (newX >= -3 && newX < boardSize && newY >= -3 && newY < boardSize && newZ >= -3 && newZ < boardSize)
+                            if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= 0 && newZ < boardSize)
                             {
                                 Piece c = Game.Board.board[newX, newY, newZ].Piece;
 
@@ -106,7 +106,7 @@ public class Gold : Piece
                 }
             }
 
-            if (currentZ + 1 >= -3)
+            if (currentZ + 1 >= 0 && currentZ + 1 < boardSize)
             {
                 Piece c = Game.Board.board[currentX, currentY, currentZ + 1].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)

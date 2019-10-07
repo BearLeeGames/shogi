@@ -74,7 +74,7 @@ public class Rook : Piece
         // Backwards check
         for (int i = 1; i < (boardSize - currentZ); ++i)
         {
-            if (currentZ - i > -3)
+            if (currentZ - i > 0)
             {
                 Piece c = Game.Board.board[currentX, currentY, currentZ + i].Piece;
                 if (c == null || c.isPlayer1 != isPlayer1)

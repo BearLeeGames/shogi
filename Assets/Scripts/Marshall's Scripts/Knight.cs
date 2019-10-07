@@ -59,7 +59,7 @@ public class Knight : Piece
                 int newZ = currentZ + z[i];
 
                 // if within bounds
-                if (newX >= -3 && newX < boardSize && newY >= -3 && newY < boardSize && newZ >= -3 && newZ < boardSize)
+                if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= 0 && newZ < boardSize)
                 {
                     Piece c = Game.Board.board[newX, newY, newZ].Piece;
 
@@ -81,7 +81,7 @@ public class Knight : Piece
                 int newZ = currentZ - z[i];
 
                 // if within bounds
-                if (newX >= -3 && newX < boardSize && newY >= -3 && newY < boardSize && newZ >= -3 && newZ < boardSize)
+                if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= 0 && newZ < boardSize)
                 {
                     Piece c = Game.Board.board[newX, newY, newZ].Piece;
 
