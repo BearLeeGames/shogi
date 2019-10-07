@@ -16,6 +16,7 @@ public class Silver : Piece
         this.currentZ = (int)piecePosition.z;
         this.isPlayer1 = true;
         this.selected = false;
+        this.pieceType = "Silver";
     }
 
     public void Update()
@@ -35,39 +36,76 @@ public class Silver : Piece
 
         List<Vector3> moves = new List<Vector3>();
 
-        for (int y = 1; y >=-1; --y)
+        if (isPlayer1)
         {
-            for(int x = -1; x <=1; ++x)
+            for (int y = 1; y >= -1; --y)
             {
-                int newX = currentX + x;
-                int newY = currentY + y;
-                int newZ = currentZ + 1;
-
-                // if within bounds
-                if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= 0 && newZ < boardSize)
+                for (int x = -1; x <= 1; ++x)
                 {
-                    Piece c = Game.Board.board[newX, newY, newZ].Piece;
+                    int newX = currentX + x;
+                    int newY = currentY + y;
+                    int newZ = currentZ + 1;
 
-                    // if there is no piece, or it is not our piece
-                    if (c == null || c.isPlayer1 != isPlayer1)
+                    // if within bounds
+                    if (newX >= -3 && newX < boardSize && newY >= -3 && newY < boardSize && newZ >= -3 && newZ < boardSize)
                     {
-                        moves.Add(new Vector3(newX, newY, newZ));
+                        Piece c = Game.Board.board[newX, newY, newZ].Piece;
 
-                        if (newZ - 2 >= 0)
+                        // if there is no piece, or it is not our piece
+                        if (c == null || c.isPlayer1 != isPlayer1)
                         {
-                            Piece c2 = Game.Board.board[newX, newY, newZ - 2].Piece;
-                            // Adds the circular spaces on back slice, excluding the center
-                            if (!(y == 0 && x == 0) && (c2 == null || c2.isPlayer1 != isPlayer1))
+                            moves.Add(new Vector3(newX, newY, newZ));
+
+                            if (newZ - 2 >= -3)
                             {
-                                moves.Add(new Vector3(newX, newY, newZ - 2));
+                                Piece c2 = Game.Board.board[newX, newY, newZ - 2].Piece;
+                                // Adds the circular spaces on back slice, excluding the center
+                                if (!(y == 0 && x == 0) && (c2 == null || c2.isPlayer1 != isPlayer1))
+                                {
+                                    moves.Add(new Vector3(newX, newY, newZ - 2));
+                                }
                             }
                         }
                     }
-                }
 
+                }
             }
         }
+        else
+        {
+            for (int y = 1; y >= -1; --y)
+            {
+                for (int x = -1; x <= 1; ++x)
+                {
+                    int newX = currentX + x;
+                    int newY = currentY + y;
+                    int newZ = currentZ - 1;
 
+                    // if within bounds
+                    if (newX >= -3 && newX < boardSize && newY >= -3 && newY < boardSize && newZ >= -3 && newZ < boardSize)
+                    {
+                        Piece c = Game.Board.board[newX, newY, newZ].Piece;
+
+                        // if there is no piece, or it is not our piece
+                        if (c == null || c.isPlayer1 != isPlayer1)
+                        {
+                            moves.Add(new Vector3(newX, newY, newZ));
+
+                            if (newZ + 2 >= -3)
+                            {
+                                Piece c2 = Game.Board.board[newX, newY, newZ - 2].Piece;
+                                // Adds the circular spaces on back slice, excluding the center
+                                if (!(y == 0 && x == 0) && (c2 == null || c2.isPlayer1 != isPlayer1))
+                                {
+                                    moves.Add(new Vector3(newX, newY, newZ + 2));
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
         setPossibleMoves(moves);
     }
 }

@@ -17,6 +17,7 @@ public class Pawn : Piece
         this.isPlayer1 = true;
         this.selected = false;
         this.promoted = false;
+        this.pieceType = "Pawn";
     }
 
     public void Update()
@@ -46,14 +47,29 @@ public class Pawn : Piece
         int boardSize = Game.Board.boardSize;
         List<Vector3> moves = new List<Vector3>();
 
-        if (currentZ + 1 < boardSize)
+        if (isPlayer1)
         {
-            Piece c = Game.Board.board[currentX, currentY, currentZ + 1].Piece;
-            if (c == null || c.isPlayer1 != isPlayer1)
+            if (currentZ + 1 < boardSize)
             {
-                moves.Add(new Vector3(currentX, currentY, currentZ + 1));
+                Piece c = Game.Board.board[currentX, currentY, currentZ + 1].Piece;
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY, currentZ + 1));
+                }
             }
         }
+        else
+        {
+            if (currentZ - 1 < boardSize)
+            {
+                Piece c = Game.Board.board[currentX, currentY, currentZ - 1].Piece;
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY, currentZ - 1));
+                }
+            }
+        }
+        
         setPossibleMoves(moves);
     }
 }

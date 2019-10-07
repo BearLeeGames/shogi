@@ -16,6 +16,7 @@ public class Gold : Piece
         this.currentZ = (int)piecePosition.z;
         this.isPlayer1 = true;
         this.selected = false;
+        this.pieceType = "Gold";
     }
 
     public void Update()
@@ -28,52 +29,92 @@ public class Gold : Piece
 
     }
 
-    // Lance can move to any amount of squares ahead of it
-    // To do: implement checking of pieces occupying spaces in front of it using gameboard
     public override void updatePossibleMoves()
     {
         int boardSize = Game.Board.boardSize;
 
         List<Vector3> moves = new List<Vector3>();
 
-        for (int z = 1; z >=0; --z)
+        if (isPlayer1)
         {
-            for(int y = 1; y >= -1; --y)
+            for (int z = 1; z >= 0; --z)
             {
-                for(int x = -1; x <=1; ++x)
+                for (int y = 1; y >= -1; --y)
                 {
-                    if (!(x == 0 && y == 0 && z == 0))
+                    for (int x = -1; x <= 1; ++x)
                     {
-                        int newX = currentX + x;
-                        int newY = currentY + y;
-                        int newZ = currentZ + z;
-
-                        // if within bounds
-                        if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= 0 && newZ < boardSize)
+                        if (!(x == 0 && y == 0 && z == 0))
                         {
-                            Piece c = Game.Board.board[newX, newY, newZ].Piece;
+                            int newX = currentX + x;
+                            int newY = currentY + y;
+                            int newZ = currentZ + z;
 
-                            // if there is no piece, or it is not our piece
-                            if (c == null || c.isPlayer1 != isPlayer1)
+                            // if within bounds
+                            if (newX >= -3 && newX < boardSize && newY >= -3 && newY < boardSize && newZ >= -3 && newZ < boardSize)
                             {
-                                moves.Add(new Vector3(newX, newY, newZ));
-                            }
-                        }
+                                Piece c = Game.Board.board[newX, newY, newZ].Piece;
 
+                                // if there is no piece, or it is not our piece
+                                if (c == null || c.isPlayer1 != isPlayer1)
+                                {
+                                    moves.Add(new Vector3(newX, newY, newZ));
+                                }
+                            }
+
+                        }
                     }
                 }
             }
-        }
 
-        if(currentZ - 1 >=0)
-        {
-            Piece c = Game.Board.board[currentX, currentY, currentZ -1].Piece;
-            if (c == null || c.isPlayer1 != isPlayer1)
+            if (currentZ - 1 >= -3)
             {
-                moves.Add(new Vector3(currentX, currentY, currentZ - 1));
+                Piece c = Game.Board.board[currentX, currentY, currentZ - 1].Piece;
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY, currentZ - 1));
+                }
             }
         }
+        else
+        {
+            for (int z = 1; z >= 0; --z)
+            {
+                for (int y = 1; y >= -1; --y)
+                {
+                    for (int x = -1; x <= 1; ++x)
+                    {
+                        if (!(x == 0 && y == 0 && z == 0))
+                        {
+                            int newX = currentX + x;
+                            int newY = currentY + y;
+                            int newZ = currentZ - z;
 
+                            // if within bounds
+                            if (newX >= -3 && newX < boardSize && newY >= -3 && newY < boardSize && newZ >= -3 && newZ < boardSize)
+                            {
+                                Piece c = Game.Board.board[newX, newY, newZ].Piece;
+
+                                // if there is no piece, or it is not our piece
+                                if (c == null || c.isPlayer1 != isPlayer1)
+                                {
+                                    moves.Add(new Vector3(newX, newY, newZ));
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            if (currentZ + 1 >= -3)
+            {
+                Piece c = Game.Board.board[currentX, currentY, currentZ + 1].Piece;
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY, currentZ + 1));
+                }
+            }
+        }
         setPossibleMoves(moves);
     }
 }

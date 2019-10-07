@@ -52,20 +52,41 @@ public class Lance : Piece
 
         List<Vector3> moves = new List<Vector3>();
 
-        for(int i = 1; i < (boardSize - currentZ); ++i)
+        if (isPlayer1)
         {
-            // if within bounds
-            if (currentZ + 1 < boardSize)
+            for (int i = 1; i < (boardSize - currentZ); ++i)
             {
-                Piece c = Game.Board.board[currentX, currentY, currentZ + 1].Piece;
-
-                // if there is no piece, or it is not our piece
-                if (c == null || c.isPlayer1 != isPlayer1)
+                // if within bounds
+                if (currentZ + 1 < boardSize)
                 {
-                    moves.Add(new Vector3(currentX, currentY, currentZ + i));
-                }
-            }
+                    Piece c = Game.Board.board[currentX, currentY, currentZ + 1].Piece;
 
+                    // if there is no piece, or it is not our piece
+                    if (c == null || c.isPlayer1 != isPlayer1)
+                    {
+                        moves.Add(new Vector3(currentX, currentY, currentZ + i));
+                    }
+                }
+
+            }
+        }
+        else
+        {
+            for (int i = 1; i < (boardSize - currentZ); ++i)
+            {
+                // if within bounds
+                if (currentZ - 1 < boardSize)
+                {
+                    Piece c = Game.Board.board[currentX, currentY, currentZ - 1].Piece;
+
+                    // if there is no piece, or it is not our piece
+                    if (c == null || c.isPlayer1 != isPlayer1)
+                    {
+                        moves.Add(new Vector3(currentX, currentY, currentZ - i));
+                    }
+                }
+
+            }
         }
         
         setPossibleMoves(moves);

@@ -18,6 +18,7 @@ public class PromotedBishop : Piece
         this.isPlayer1 = true;
         this.selected = false;
         this.promoted = false;
+        this.pieceType = "PromotedBishop";
     }
 
     public void Update()
@@ -50,15 +51,17 @@ public class PromotedBishop : Piece
     // To do: implement checking of pieces occupying spaces in front of it using gameboard
     public override void updatePossibleMoves()
     {
+        int boardSize = Game.Board.boardSize;
+
         List<Vector3> moves = new List<Vector3>();
 
-        for (int i = 1; i < (9 - currentZ); ++i)
+        for (int i = 1; i < (boardSize - currentZ); ++i)
         {
             // XZ plane 
 
             // Up-right direction
 
-            if (currentX + i < 9 && currentZ + i < 9)
+            if (currentX + i < boardSize && currentZ + i < boardSize)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY, currentZ + i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -68,7 +71,7 @@ public class PromotedBishop : Piece
                 }
             }
             // Up-left direction
-            if (currentX - i >= 0 && currentZ + i < 9)
+            if (currentX - i >= -3 && currentZ + i < boardSize)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY, currentZ + i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -79,7 +82,7 @@ public class PromotedBishop : Piece
             }
 
             // Down-right direction
-            if (currentX + i < 9 && currentZ - i >= 0)
+            if (currentX + i < boardSize && currentZ - i >= -3)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY, currentZ - i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -90,7 +93,7 @@ public class PromotedBishop : Piece
             }
 
             // Down-left direction
-            if (currentX - i >= 0 && currentZ - i >= 0)
+            if (currentX - i >= -3 && currentZ - i >= -3)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY, currentZ - i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -102,7 +105,7 @@ public class PromotedBishop : Piece
 
             // YZ plane
 
-            if (currentY + i < 9 && currentZ + i < 9)
+            if (currentY + i < boardSize && currentZ + i < boardSize)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY + i, currentZ + i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -112,7 +115,7 @@ public class PromotedBishop : Piece
                 }
             }
 
-            if (currentY - i >= 0 && currentZ - i >= 0)
+            if (currentY - i >= -3 && currentZ - i >= -3)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY - i, currentZ - i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -122,7 +125,7 @@ public class PromotedBishop : Piece
                 }
             }
 
-            if (currentY + i < 9 && currentZ - i >= 0)
+            if (currentY + i < boardSize && currentZ - i >= -3)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY + i, currentZ - i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -132,7 +135,7 @@ public class PromotedBishop : Piece
                 }
             }
 
-            if (currentY - i >= 0 && currentZ + i < 9)
+            if (currentY - i >= -3 && currentZ + i < boardSize)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX, currentY - i, currentZ + i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -144,7 +147,7 @@ public class PromotedBishop : Piece
 
             // XY plane
 
-            if (currentX + i < 9 && currentY + i < 9)
+            if (currentX + i < boardSize && currentY + i < boardSize)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY + i, currentZ];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -154,7 +157,7 @@ public class PromotedBishop : Piece
                 }
             }
 
-            if (currentX - i < 9 && currentY - i >= 0)
+            if (currentX - i < boardSize && currentY - i >= -3)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY - i, currentZ];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -164,7 +167,7 @@ public class PromotedBishop : Piece
                 }
             }
 
-            if (currentX + i < 9 && currentY - i >= 0)
+            if (currentX + i < boardSize && currentY - i >= -3)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY - i, currentZ];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -174,7 +177,7 @@ public class PromotedBishop : Piece
                 }
             }
 
-            if (currentX - i < 9 && currentY + i < 9)
+            if (currentX - i < boardSize && currentY + i < boardSize)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY + i, currentZ];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -187,7 +190,7 @@ public class PromotedBishop : Piece
             // All axis
 
             // Up-right direction
-            if (currentX + i < 9 && currentY + i < 9 && currentZ + i < 9)
+            if (currentX + i < boardSize && currentY + i < boardSize && currentZ + i < boardSize)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY + i, currentZ + i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -197,7 +200,7 @@ public class PromotedBishop : Piece
                 }
             }
 
-            if (currentX + i < 9 && currentY - i >= 0 && currentZ + i < 9)
+            if (currentX + i < boardSize && currentY - i >= -3 && currentZ + i < boardSize)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY - i, currentZ + i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -208,7 +211,7 @@ public class PromotedBishop : Piece
             }
 
             // Up-left direction
-            if (currentX - i >= 0 && currentY + i < 9 && currentZ + i < 9)
+            if (currentX - i >= -3 && currentY + i < boardSize && currentZ + i < boardSize)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY + i, currentZ + i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -218,7 +221,7 @@ public class PromotedBishop : Piece
                 }
             }
 
-            if (currentX - i >= 0 && currentY - i >= 0 && currentZ + i < 9)
+            if (currentX - i >= -3 && currentY - i >= -3 && currentZ + i < boardSize)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY - i, currentZ + i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -229,7 +232,7 @@ public class PromotedBishop : Piece
             }
 
             // Down-right direction
-            if (currentX + i < 9 && currentY + i < 9 && currentZ - i >= 0)
+            if (currentX + i < boardSize && currentY + i < boardSize && currentZ - i >= -3)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY + i, currentZ - i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -239,7 +242,7 @@ public class PromotedBishop : Piece
                 }
             }
 
-            if (currentX + i < 9 && currentY - i >= 0 && currentZ - i >= 0)
+            if (currentX + i < boardSize && currentY - i >= -3 && currentZ - i >= -3)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX + i, currentY - i, currentZ - i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -250,7 +253,7 @@ public class PromotedBishop : Piece
             }
 
             // Down-left direction
-            if (currentX - i >= 0 && currentY + i < 9 && currentZ - i >= 0)
+            if (currentX - i >= -3 && currentY + i < boardSize && currentZ - i >= -3)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY + i, currentZ - i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -260,7 +263,7 @@ public class PromotedBishop : Piece
                 }
             }
 
-            if (currentX - i >= 0 && currentY - i >= 0 && currentZ - i >= 0)
+            if (currentX - i >= -3 && currentY - i >= 0 && currentZ - i >= -3)
             {
                 ShogiPiece c = BoardManager.Instance.shogiPieces[currentX - i, currentY - i, currentZ - i];
                 if (c == null || c.isPlayer1 != isPlayer1)
@@ -291,7 +294,7 @@ public class PromotedBishop : Piece
 
             ShogiPiece c = BoardManager.Instance.shogiPieces[newX, newY, newZ];
 
-            if (newX >= 0 && newX < 9 && newY >= 0 && newY < 9 && newZ >= 0 && newZ < 9 && (c == null || c.isPlayer1 != isPlayer1))
+            if (newX >= -3 && newX < boardSize && newY >= -3 && newY < boardSize && newZ >= -3 && newZ < boardSize && (c == null || c.isPlayer1 != isPlayer1))
             {
                 moves.Add(new Vector3(newX, newY, newZ));
             }

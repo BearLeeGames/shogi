@@ -53,6 +53,41 @@ public class Rook : Piece
         List<Vector3> moves = new List<Vector3>();
 
         int boardSize = Game.Board.boardSize;
+        
+        // Forward check
+        for( int i = 1; i < (boardSize - currentZ); ++i )
+        {
+            if(currentZ + i < boardSize)
+            {
+                Piece c = Game.Board.board[currentX, currentY, currentZ + i].Piece;
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY, currentZ + i));
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
+        // Backwards check
+        for (int i = 1; i < (boardSize - currentZ); ++i)
+        {
+            if (currentZ - i > -3)
+            {
+                Piece c = Game.Board.board[currentX, currentY, currentZ + i].Piece;
+                if (c == null || c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY, currentZ + i));
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
 
         for (int i = 1; i < (boardSize - currentZ); ++i)
         {

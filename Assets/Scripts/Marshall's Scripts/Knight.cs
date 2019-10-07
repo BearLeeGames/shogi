@@ -18,6 +18,7 @@ public class Knight : Piece
         this.isPlayer1 = true;
         this.selected = false;
         this.promoted = false;
+        this.pieceType = "Knight";
         
     }
 
@@ -48,24 +49,50 @@ public class Knight : Piece
         int[] y = {0, 0, 1, -1};
         int[] z = {2, 2, 2, 2 };
 
-        for (int i = 0; i < 4; ++i)
+
+        if(isPlayer1)
         {
-            int newX = currentX + x[i];
-            int newY = currentY + y[i];
-            int newZ = currentZ + z[i];
-
-            // if within bounds
-            if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= 0 && newZ < boardSize)
+            for (int i = 0; i < 4; ++i)
             {
-                Piece c = Game.Board.board[newX, newY, newZ].Piece;
+                int newX = currentX + x[i];
+                int newY = currentY + y[i];
+                int newZ = currentZ + z[i];
 
-                // if there is no piece, or it is not our piece
-                if (c == null || c.isPlayer1 != isPlayer1)
+                // if within bounds
+                if (newX >= -3 && newX < boardSize && newY >= -3 && newY < boardSize && newZ >= -3 && newZ < boardSize)
                 {
-                    moves.Add(new Vector3(newX, newY, newZ));
+                    Piece c = Game.Board.board[newX, newY, newZ].Piece;
+
+                    // if there is no piece, or it is not our piece
+                    if (c == null || c.isPlayer1 != isPlayer1)
+                    {
+                        moves.Add(new Vector3(newX, newY, newZ));
+                    }
                 }
+
             }
-            
+        }
+        else
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                int newX = currentX - x[i];
+                int newY = currentY + y[i];
+                int newZ = currentZ - z[i];
+
+                // if within bounds
+                if (newX >= -3 && newX < boardSize && newY >= -3 && newY < boardSize && newZ >= -3 && newZ < boardSize)
+                {
+                    Piece c = Game.Board.board[newX, newY, newZ].Piece;
+
+                    // if there is no piece, or it is not our piece
+                    if (c == null || c.isPlayer1 != isPlayer1)
+                    {
+                        moves.Add(new Vector3(newX, newY, newZ));
+                    }
+                }
+
+            }
         }
 
         setPossibleMoves(moves);
