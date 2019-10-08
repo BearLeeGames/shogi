@@ -21,15 +21,9 @@ public class Silver : Piece
 
     public void Update()
     {
-
-        // To do: implement checking if piece is selected, and if space to move to has been selected
         updatePossibleMoves();
-
-        // For testing purposes to see knight movement
-
     }
 
-    // To do: implement checking of pieces occupying spaces in front of it using gameboard
     public override void updatePossibleMoves()
     {
         int boardSize = Game.Board.boardSize;
@@ -82,7 +76,7 @@ public class Silver : Piece
                     int newZ = currentZ - 1;
 
                     // if within bounds
-                    if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= -3 && newZ < boardSize)
+                    if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= 0 && newZ < boardSize)
                     {
                         Piece c = Game.Board.board[newX, newY, newZ].Piece;
 

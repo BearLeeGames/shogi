@@ -22,23 +22,7 @@ public class Rook : Piece
 
     public void Update()
     {
-        // To do: implement checking if piece is selected, and if space to move to has been selected
         updatePossibleMoves();
-
-        // For testing purposes to see lance movement
-        //if (Input.GetKeyDown(KeyCode.Keypad1))
-        //{
-        //    move((int)piecePosition.x, (int)piecePosition.y, (int)piecePosition.z + 1);
-
-        //}
-        //else if (Input.GetKeyDown(KeyCode.Keypad2))
-        //{
-        //    move((int)piecePosition.x, (int)piecePosition.y, (int)piecePosition.z + 2);
-        //}
-        //else if (Input.GetKeyDown(KeyCode.Keypad3))
-        //{
-        //    move((int)piecePosition.x, (int)piecePosition.y, (int)piecePosition.z + 3);
-        //}
     }
 
     private void promote()
@@ -46,8 +30,6 @@ public class Rook : Piece
         promoted = true;
     }
 
-    // Lance can move to any amount of squares ahead of it
-    // To do: implement checking of pieces occupying spaces in front of it using gameboard
     public override void updatePossibleMoves()
     {
         List<Vector3> moves = new List<Vector3>();
@@ -55,40 +37,117 @@ public class Rook : Piece
         int boardSize = Game.Board.boardSize;
         
         // Forward check
-        for( int i = 1; i < (boardSize - currentZ); ++i )
+        for( int i = 1; i <= (boardSize - currentZ); ++i )
         {
-            if(currentZ + i < boardSize)
-            {
                 Piece c = Game.Board.board[currentX, currentY, currentZ + i].Piece;
-                if (c == null || c.isPlayer1 != isPlayer1)
+                if (c == null)
                 {
                     moves.Add(new Vector3(currentX, currentY, currentZ + i));
+                }
+                else if (c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY, currentZ + i));
+                    break;
                 }
                 else
                 {
                     break;
                 }
-            }
         }
 
         // Backwards check
-        for (int i = 1; i < (boardSize - currentZ); ++i)
+        for (int i = 1; i <= currentZ; ++i)
         {
-            if (currentZ - i > 0)
-            {
-                Piece c = Game.Board.board[currentX, currentY, currentZ + i].Piece;
-                if (c == null || c.isPlayer1 != isPlayer1)
+                Piece c = Game.Board.board[currentX, currentY, currentZ - i].Piece;
+                if (c == null)
                 {
-                    moves.Add(new Vector3(currentX, currentY, currentZ + i));
+                    moves.Add(new Vector3(currentX, currentY, currentZ - i));
+                }
+                else if (c.isPlayer1 != isPlayer1)
+                {
+                    moves.Add(new Vector3(currentX, currentY, currentZ - i));
+                    break;
                 }
                 else
                 {
                     break;
                 }
+        }
+
+        // Upwards check
+        for (int i = 1; i <= (boardSize - currentY); ++i)
+        {
+            Piece c = Game.Board.board[currentX, currentY + i, currentZ].Piece;
+            if (c == null)
+            {
+                moves.Add(new Vector3(currentX, currentY + i, currentZ));
+            }
+            else if (c.isPlayer1 != isPlayer1)
+            {
+                moves.Add(new Vector3(currentX, currentY + i, currentZ));
+                break;
+            }
+            else
+            {
+                break;
             }
         }
 
-
+        // Downwards check
+        for (int i = 1; i <= currentY; ++i)
+        {
+            Piece c = Game.Board.board[currentX, currentY - i, currentZ].Piece;
+            if (c == null)
+            {
+                moves.Add(new Vector3(currentX, currentY - i, currentZ));
+            }
+            else if (c.isPlayer1 != isPlayer1)
+            {
+                moves.Add(new Vector3(currentX, currentY - i, currentZ));
+                break;
+            }
+            else
+            {
+                break;
+            }
+        }
+        // Right check
+        for (int i = 1; i < (boardSize - currentX); ++i)
+        {
+            Piece c = Game.Board.board[currentX + i, currentY, currentZ].Piece;
+            if (c == null)
+            {
+                moves.Add(new Vector3(currentX + i, currentY, currentZ));
+            }
+            else if (c.isPlayer1 != isPlayer1)
+            {
+                moves.Add(new Vector3(currentX + i, currentY, currentZ));
+                break;
+            }
+            else
+            {
+                break;
+            }
+        }
+        // Left check
+        for (int i = 1; i < currentX; ++i)
+        {
+            Piece c = Game.Board.board[currentX - i, currentY, currentZ].Piece;
+            if (c == null)
+            {
+                moves.Add(new Vector3(currentX - i, currentY, currentZ));
+            }
+            else if (c.isPlayer1 != isPlayer1)
+            {
+                moves.Add(new Vector3(currentX - i, currentY, currentZ));
+                break;
+            }
+            else
+            {
+                break;
+            }
+        }
+        /*
         for (int i = 1; i < (boardSize - currentZ); ++i)
         {
             
@@ -146,7 +205,7 @@ public class Rook : Piece
                 }
             }
         }
-
+        */
         setPossibleMoves(moves);
     }
 }
