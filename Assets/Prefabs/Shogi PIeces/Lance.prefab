@@ -22,8 +22,8 @@ GameObject:
   - component: {fileID: 33038899940044224}
   - component: {fileID: 23613782971808950}
   - component: {fileID: 65503133276234908}
-  - component: {fileID: 114989151471350588}
-  m_Layer: 10
+  - component: {fileID: 114769300152028474}
+  m_Layer: 9
   m_Name: Lance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114989151471350588
+--- !u!114 &114769300152028474
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,7 +105,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1772715985795546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8c08f983b9484f2d85c22e41347f1a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 38b5c8b2dc1b99f4db802b55a063fd37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pt: 1
+  currentX: 0
+  currentY: 0
+  currentZ: 0
   isPlayer1: 0
+  selected: 0
+  possibleMoves: []
+  promoted: 0

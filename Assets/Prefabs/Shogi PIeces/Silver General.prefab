@@ -22,8 +22,8 @@ GameObject:
   - component: {fileID: 33847607049871544}
   - component: {fileID: 23169670074188786}
   - component: {fileID: 65619403658222458}
-  - component: {fileID: 114877654420756110}
-  m_Layer: 10
+  - component: {fileID: 114536834971745488}
+  m_Layer: 9
   m_Name: Silver General
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114877654420756110
+--- !u!114 &114536834971745488
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,6 +105,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1940044082379938}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2b846542235a4f9a8180f14ba55ca27, type: 3}
+  m_Script: {fileID: 11500000, guid: 999909c8866bf61459f3d754af5041ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pt: 7
+  currentX: 0
+  currentY: 0
+  currentZ: 0
+  isPlayer1: 0
+  selected: 0
+  possibleMoves: []
+  piecePosition: {x: 0, y: 0, z: 0}

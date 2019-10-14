@@ -10,8 +10,9 @@ public abstract class Piece : MonoBehaviour
     [SerializeField] public int currentX;
     [SerializeField] public int currentY;
     [SerializeField] public int currentZ;
-    [SerializeField] public bool player1;
+    [SerializeField] public bool isPlayer1;
     [SerializeField] public bool selected;
+    [SerializeField] public string pieceType;
 
     [SerializeField] private List<Vector3> possibleMoves;
 
@@ -47,8 +48,28 @@ public abstract class Piece : MonoBehaviour
         currentZ = z; 
     }
 
-    private void swapPlayers()
+    public void setPlayer(bool player)
     {
-        player1 = !player1;
+        isPlayer1 = player;
+    }
+
+    public int getX()
+    {
+        return currentX;
+    }
+    
+    public int getY()
+    {
+        return currentY;
+    }
+
+    public int getZ()
+    {
+        return currentZ;
+    }
+
+    public string getType()
+    {
+        return pieceType;
     }
 }

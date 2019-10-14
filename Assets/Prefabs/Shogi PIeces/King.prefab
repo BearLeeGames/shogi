@@ -22,8 +22,8 @@ GameObject:
   - component: {fileID: 33081302428886020}
   - component: {fileID: 23902197955962510}
   - component: {fileID: 65541740877077766}
-  - component: {fileID: 114492490889036238}
-  m_Layer: 10
+  - component: {fileID: 114226799863729212}
+  m_Layer: 9
   m_Name: King
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114492490889036238
+--- !u!114 &114226799863729212
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,7 +105,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1818068916768454}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e9ddbb85ffe040beae0c3d22bfd0e30, type: 3}
+  m_Script: {fileID: 11500000, guid: f9de8cb98c7a2bd4eab16b6b2b1997e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pt: 5
+  currentX: 0
+  currentY: 0
+  currentZ: 0
   isPlayer1: 0
+  selected: 0
+  possibleMoves: []
+  piecePosition: {x: 0, y: 0, z: 0}
