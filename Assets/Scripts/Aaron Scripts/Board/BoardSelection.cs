@@ -31,7 +31,7 @@ namespace Game
         [SerializeField] [Tooltip("The tile material on hover")] Material hoverMaterial;
         [SerializeField] [Tooltip("The tile material w/ no hover")] Material restingMaterial;
         [SerializeField] [Tooltip("The tile material for range indicators")] Material rangeMaterial;
-
+        [SerializeField] [Tooltip("The tile material for enemy in range")] Material enemyInRangeMaterial;
 
         // GameObject used to show the movement/attack range of a pieve
         [SerializeField] private GameObject rangeCube;
@@ -180,16 +180,21 @@ namespace Game
                 // change the color back to normal
                 if (hoveredSpot != null)
                 {
+                    // change the material of the previously hovered spot back to normal
                     if (hoveredSpot.tag == "Range")
                     {
-                        // change the material of the previously hovered spot back to normal
                         hoveredSpot.GetComponent<Renderer>().material = rangeMaterial;
+                    }
+                    else if (hoveredSpot.tag == "EnemyInRange")
+                    {
+                        hoveredSpot.GetComponent<Renderer>().material = enemyInRangeMaterial;
                     }
                     else
                     {
                         hoveredSpot.GetComponent<Renderer>().material = restingMaterial;
                     }
                 }
+
 
                 // set the hovered spot to null (not hovering over anything
                 hoveredSpot = null;
@@ -215,6 +220,10 @@ namespace Game
                     if (hoveredSpot.tag == "Range")
                     {
                         hoveredSpot.GetComponent<Renderer>().material = rangeMaterial;
+                    }
+                    else if(hoveredSpot.tag == "EnemyInRange")
+                    {
+                        hoveredSpot.GetComponent<Renderer>().material = enemyInRangeMaterial;
                     }
                     else
                     {
@@ -386,11 +395,24 @@ namespace Game
                 // set those tile materials to range materials
                 GameObject rangeTile = Game.Board.board[(int)moves[i].x, (int)moves[i].y, (int)moves[i].z].Tile;
 
-                rangeTile.GetComponent<Renderer>().material = rangeMaterial;
+                if (Game.Board.board[(int)moves[i].x, (int)moves[i].y, (int)moves[i].z].Piece != null)
+                {
+                    if (Game.Board.board[(int)moves[i].x, (int)moves[i].y, (int)moves[i].z].Piece.isPlayer1 != selectedPiece.isPlayer1)
+                    {
+                        rangeTile.GetComponent<Renderer>().material = enemyInRangeMaterial;
+                        rangeTile.tag = "EnemyInRange";
+                    }
+                }
+                else
+                {
+                    rangeTile.GetComponent<Renderer>().material = rangeMaterial;
+                    rangeTile.tag = "Range";
+                }
+                
 
                 // this is the PieceLayer, which is hoverable
                 rangeTile.layer = 9;
-                rangeTile.tag = "Range";
+                
             }
         }
 
