@@ -16,7 +16,7 @@ public class Gold : Piece
         this.currentZ = (int)piecePosition.z;
         this.isPlayer1 = true;
         this.selected = false;
-        this.pieceType = "Gold";
+        this.pt = pieceType.Gold;
     }
 
     public void Update()

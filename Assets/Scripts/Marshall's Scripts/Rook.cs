@@ -18,6 +18,7 @@ public class Rook : Piece
         this.isPlayer1 = true;
         this.selected = false;
         this.promoted = false;
+        this.pt = pieceType.Rook;
     }
 
     public void Update()

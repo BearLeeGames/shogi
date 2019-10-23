@@ -42,6 +42,11 @@ namespace Game
         // list of Vector3 moves that a piece can take
         List<Vector3> allowedMoves;
 
+        // object for controlling the piece graveyard
+        [SerializeField] [Tooltip("Object that shows all pieces captured")] public GameObject GraveyardObject;
+
+        Graveyard Graveyard;
+
         #endregion
 
 
@@ -83,6 +88,7 @@ namespace Game
         void Start()
         {
             rangeCubes = new List<GameObject>();
+            Graveyard = GraveyardObject.GetComponent<Graveyard>();
         }
 
         void Update()
@@ -250,15 +256,20 @@ namespace Game
                     // if you haven't clicked on a piece already, click on it
                     if (selectedPiece == null)
                     {
-                        Debug.Log("clicked on a piece!");
-                        // Select the piece
+                        Debug.Log("SELECT PIECE");
                         SelectShogiPiece(mouseX, mouseY, mouseZ);
                     }
                     else
                     {
-                        Debug.Log("piece already clicked on, move or cancel");
-                        // go ahead and move the piece
-                        MoveShogiPiece(mouseX, mouseY, mouseZ);
+                        // check if the move is allowed
+                        if (CheckMove(selectedPiece.getPossibleMoves(), new Vector3(mouseX, mouseY, mouseZ)))
+                        {
+                            Debug.Log("MOVE PIECE");
+                            MoveShogiPiece(mouseX, mouseY, mouseZ);
+                        }
+                        // hide the range cubes and reset selectedPiece
+                        HideRange(selectedPiece.getPossibleMoves());
+                        selectedPiece = null;
                     }
                 }
                 else
@@ -285,47 +296,77 @@ namespace Game
          * check if move is allowed (based on the piece function)
          * check/destroy if there's a piece in the targeted location
          * 
-         * 
+         * move to Board.cs?
          * 
          */
         private void MoveShogiPiece(int x, int y, int z)
         {
 
-            // check if the move is allowed
-            if (CheckMove(selectedPiece.getPossibleMoves(), new Vector3(x, y, z)))
+            Piece piece = Game.Board.board[x, y, z].Piece;
+
+            // remove the selectedPiece from original position in the 3d array/logical board
+            Game.Board.board[selectedPiece.currentX, selectedPiece.currentY, selectedPiece.currentZ].Piece = null;
+
+            // if there's a piece there, check the team and CAPTURE THE ENEMY
+            if (piece != null && piece.isPlayer1 != Game.Board.isPlayer1Turn)
             {
-                Piece piece = Game.Board.board[x, y, z].Piece;
-
-                // if there's a piece there, check the team and CAPTURE THE ENEMY
-                if (piece != null && piece.isPlayer1 != Game.Board.isPlayer1Turn)
-                {
-                    Destroy(piece.gameObject);
-                    // TODO
-                    // code for adding to the piece to your droppable resources goes here
-                }
-
-                // remove the piece from original position in the 3d array/logical board
-                Game.Board.board[selectedPiece.currentX, selectedPiece.currentY, selectedPiece.currentZ].Piece = null;
-
-                // set the piece in the 3d array/logical board
-                Game.Board.board[x, y, z].Piece = selectedPiece;
-
-                // set position in space of selected piece to the new location
-                selectedPiece.transform.position = Game.Board.GetPieceCenter(x, y, z);
-
-                // set the piece position (for it's own properties)
-                selectedPiece.setPosition(x, y, z);
-
-                // end turn
-                Game.Board.changeTurns();
-
-
+                CapturePiece(piece);
             }
-            // hide the range cubes and reset selectedPiece
-            HideRange(selectedPiece.getPossibleMoves());
-            selectedPiece = null;
+
+            // set the piece in the 3d array/logical board
+            Game.Board.board[x, y, z].Piece = selectedPiece;
+
+            // set position in space of selected piece to the new location
+            selectedPiece.transform.position = Game.Board.GetPieceCenter(x, y, z);
+
+            // set the piece position (for it's own properties)
+            selectedPiece.setPosition(x, y, z);
+
+            // end turn
+            Game.Board.changeTurns();
+
         }
 
+        private void MoveShogiPiece(Vector3Int coordinate)
+        {
+
+            Piece piece = Game.Board.board[coordinate.x, coordinate.y, coordinate.z].Piece;
+
+            // remove the selectedPiece from original position in the 3d array/logical board
+            Game.Board.board[selectedPiece.currentX, selectedPiece.currentY, selectedPiece.currentZ].Piece = null;
+
+            // if there's a piece there, check the team and CAPTURE THE ENEMY
+            if (piece != null && piece.isPlayer1 != Game.Board.isPlayer1Turn)
+            {
+                CapturePiece(piece);
+            }
+
+            // set the piece in the 3d array/logical board
+            Game.Board.board[coordinate.x, coordinate.y, coordinate.z].Piece = selectedPiece;
+
+            // set position in space of selected piece to the new location
+            selectedPiece.transform.position = Game.Board.GetPieceCenter(coordinate.x, coordinate.y, coordinate.z);
+
+            // set the piece position (for it's own properties)
+            selectedPiece.setPosition(coordinate.x, coordinate.y, coordinate.z);
+
+            // end turn
+            Game.Board.changeTurns();
+
+        }
+
+        /*
+         * Capture an enemy piece
+         *
+         */
+        private void CapturePiece(Piece piece)
+        {
+            // destroy the piece
+            Destroy(piece);
+
+            // add the count to the other player's graveyard
+            Graveyard.AddPiece(piece.pt, !piece.isPlayer1);
+        }
 
         /* select the clicked shogi piece (show shogi piece range)
          * Params:

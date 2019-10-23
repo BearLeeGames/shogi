@@ -17,7 +17,7 @@ public class Pawn : Piece
         this.isPlayer1 = true;
         this.selected = false;
         this.promoted = false;
-        this.pieceType = "Pawn";
+        this.pt = pieceType.Pawn;
     }
 
     public void Update()

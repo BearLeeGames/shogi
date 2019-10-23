@@ -9,7 +9,7 @@ using Unity.Collections;
 namespace Game
 {
     /// <summary>
-    /// A instance referenceable Board that holds all of the tiles and pieces,
+    /// An instance referenceable Board that holds all of the tiles and pieces,
     /// as well as allowing piece movement within the board itself among other
     /// Board related logic.
     /// </summary>
@@ -29,8 +29,8 @@ namespace Game
         [SerializeField] [ReadOnly] static int m_boardSize = 7;
 
         [Header("Tile information")]
-        [SerializeField] [ReadOnly] float m_cubeSize = 1.0f;
-        [SerializeField] [ReadOnly] float m_cubeOffset = 0.5f;
+        [SerializeField] [ReadOnly] static float m_cubeSize = 1.0f;
+        [SerializeField] [ReadOnly] static float m_cubeOffset = 0.5f;
 
         [Header("Tile prefab and information")]
         [SerializeField] [Tooltip("The tile prefab")] GameObject m_tile;
@@ -102,6 +102,16 @@ namespace Game
         public static float tileOffset
         {
             get { return m_tileOffset; }
+        }
+
+        public static float cubeSize
+        {
+            get { return m_cubeSize; }
+        }
+
+        public static float cubeOffset
+        {
+            get { return m_cubeOffset; }
         }
 
         public static void changeTurns()
@@ -188,11 +198,11 @@ namespace Game
             // Otherwise the center is the central cube.
             if (boardSize % 2 == 0)
             {
-                return -(boardSize / 2 * (1 + tileOffset)) + 0.5f;
+                return -(boardSize / 2 * (cubeSize + tileOffset)) + cubeOffset;
             }
             else
             {
-                return -(Mathf.Floor(boardSize / 2) * (1 + tileOffset));
+                return -(Mathf.Floor(boardSize / 2) * (cubeSize + tileOffset));
             }
         }
 
@@ -204,9 +214,9 @@ namespace Game
         {
             float offset = GetCenterOffsetOrigin();
 
-            float arrayX = (x - offset) / (1 + tileOffset);
-            float arrayY = (y - offset) / (1 + tileOffset);
-            float arrayZ = (z - offset) / (1 + tileOffset);
+            float arrayX = (x - offset) / (cubeSize + tileOffset);
+            float arrayY = (y - offset) / (cubeSize + tileOffset);
+            float arrayZ = (z - offset) / (cubeSize + tileOffset);
 
             return new Vector3(arrayX, arrayY, arrayZ);
         }
@@ -242,37 +252,7 @@ namespace Game
          */
         #region Constructors
 
-        // assign the list of Shogi Piece prefabs to their string names (just for our own use)
-        private void AssignNames()
-        {
-            m_shogiPiecePrefabs = new Dictionary<string, GameObject>
-            {
-                { "Pawn", m_piecePrefabs[0] },
-                { "Lance", m_piecePrefabs[1] },
-                { "Knight", m_piecePrefabs[2] },
-                { "Silver General", m_piecePrefabs[3] },
-                { "Gold General", m_piecePrefabs[4] },
-                { "Bishop", m_piecePrefabs[5] },
-                { "Rook", m_piecePrefabs[6] },
-                { "King", m_piecePrefabs[7] }
-            };
-        }
 
-
-        // ----------------------- TO DO: generate starting board with BoardTiles correctly 
-
-        // instantiates the Piece objects
-        void GenerateStartingPieces()
-        {
-            SpawnPawns();
-            SpawnLances();
-            SpawnKnights();
-            SpawnSilverGenerals();
-            SpawnGoldGenerals();
-            SpawnBishops();
-            SpawnRooks();
-            SpawnKings();
-        }
         #endregion
 
 
@@ -291,7 +271,7 @@ namespace Game
         {
             if (m_board != null)
                 DestroyBoard();
-
+            
             // Set m_board to specified value size
             m_board     = new BoardTile[boardSize, boardSize, boardSize];
             m_boardSize = boardSize;
@@ -305,7 +285,6 @@ namespace Game
                     foreach (int x in Enumerable.Range(0, boardSize))
                     {
 
-                        // TODO: Change this to spawn based on (0, 0, 0) origin
                         m_board[x, y, z] = new BoardTile(
                             new Vector3Int(x, y, z),
                             Instantiate(m_tile,
@@ -370,50 +349,6 @@ namespace Game
             }
         }
 
-        /* (check for which team the piece is on)
-         * Moves a piece to the 2nd set of coordinates. If a piece
-         * already exists on the tile, then capture that piece.
-         */
-        public void MovePiece(uint x1, uint y1, uint z1, uint x2, uint y2, uint z2)
-        {
-            // Save the current piece into a temp variable and 
-            // get rid of the current tile's piece.
-            Piece piece = m_board[x1, y1, z1].Piece;
-            Destroy(m_board[x1, y1, z1].Piece);
-
-            // If there is a piece on the new tile, capture it.
-            if (m_board[x2, y2, z2].Piece)
-            {
-                CapturePiece(m_board[x2, y2, z2]);
-            }
-            else
-            {
-                m_board[x2, y2, z2].Piece = piece;
-            }
-        }
-
-        /*
-         * Moves a piece to the 2nd set of coordinates. If a piece
-         * already exists on the tile, then capture that piece.
-         */
-        public void MovePiece(Vector3Int coordinates1, Vector3Int coordinates2)
-        {
-            // Save the current piece into a temp variable and 
-            // get rid of the current tile's piece.
-            Piece piece = m_board[coordinates1.x, coordinates1.y, coordinates1.z].Piece;
-            Destroy(m_board[coordinates1.x, coordinates1.y, coordinates1.z].Piece);
-
-            // If there is a piece on the new tile, capture it.
-            if (m_board[coordinates2.x, coordinates2.y, coordinates2.z].Piece)
-            {
-                CapturePiece(m_board[coordinates2.x, coordinates2.y, coordinates2.z]);
-            }
-            else
-            {
-                m_board[coordinates2.x, coordinates2.y, coordinates2.z].Piece = piece;
-            }
-        }
-
         /*
          * The two IsTileAvailable methods check and returns whether
          * a piece exists in the specified tile.
@@ -428,19 +363,6 @@ namespace Game
             return m_board[vector.x, vector.y, vector.z].Piece != null;
         }
 
-        /*
-         * The two HighlightTile methods are currently null
-         */
-        public void HighlightTile(uint x, uint y, uint z)
-        {
-            // Currently empty, need Aaron's component
-        }
-
-        public void HighlightTile(Vector3Int vector)
-        {
-            // Currently empty, need Aaron's component
-        }
-
         #endregion
 
 
@@ -450,15 +372,39 @@ namespace Game
          */
         #region Member Functions
 
+        // assign the list of Shogi Piece prefabs to their string names (just for our own use)
+        void AssignNames()
+        {
+            m_shogiPiecePrefabs = new Dictionary<string, GameObject>
+            {
+                { "Pawn", m_piecePrefabs[0] },
+                { "Lance", m_piecePrefabs[1] },
+                { "Knight", m_piecePrefabs[2] },
+                { "Silver General", m_piecePrefabs[3] },
+                { "Gold General", m_piecePrefabs[4] },
+                { "Bishop", m_piecePrefabs[5] },
+                { "Rook", m_piecePrefabs[6] },
+                { "King", m_piecePrefabs[7] }
+            };
+        }
+
+        // instantiates the Piece objects
+        void GenerateStartingPieces()
+        {
+            SpawnPawns();
+            SpawnLances();
+            SpawnKnights();
+            SpawnSilverGenerals();
+            SpawnGoldGenerals();
+            SpawnBishops();
+            SpawnRooks();
+            SpawnKings();
+        }
+
         private void DestroyTile(BoardTile tile)
         {
             Destroy(tile.Piece);
             Destroy(tile.Tile);
-        }
-
-        private void CapturePiece(BoardTile tile)
-        {
-            Destroy(tile.Piece);
         }
 
         // spawn a shogi piece on the board
@@ -469,9 +415,6 @@ namespace Game
 
             // give the piece a transform and add it to the board
             piece.transform.SetParent(transform);
-
-            // set position of Piece (not using piece class yet)
-            // piece.setPosition(x, y, z);
 
             m_board[x, y, z].Piece = piece.GetComponent<Piece>(); // do we GetComponent Piece here?
             m_board[x, y, z].Piece.setPosition(x, y, z);

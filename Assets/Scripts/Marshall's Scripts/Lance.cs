@@ -17,6 +17,7 @@ public class Lance : Piece
         this.isPlayer1 = true;
         this.selected = false;
         this.promoted = false;
+        this.pt = pieceType.Lance;
     }
 
     public void Update()

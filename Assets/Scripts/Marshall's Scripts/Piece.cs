@@ -12,7 +12,6 @@ public abstract class Piece : MonoBehaviour
     [SerializeField] public int currentZ;
     [SerializeField] public bool isPlayer1;
     [SerializeField] public bool selected;
-    [SerializeField] public string pieceType;
 
     [SerializeField] private List<Vector3> possibleMoves;
 
@@ -68,8 +67,8 @@ public abstract class Piece : MonoBehaviour
         return currentZ;
     }
 
-    public string getType()
+    public pieceType getType()
     {
-        return pieceType;
+        return pt;
     }
 }

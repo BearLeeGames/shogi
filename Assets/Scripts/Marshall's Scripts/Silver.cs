@@ -16,7 +16,7 @@ public class Silver : Piece
         this.currentZ = (int)piecePosition.z;
         this.isPlayer1 = true;
         this.selected = false;
-        this.pieceType = "Silver";
+        this.pt = pieceType.Silver;
     }
 
     public void Update()
@@ -82,7 +82,7 @@ public class Silver : Piece
                     int newZ = currentZ - 1;
 
                     // if within bounds
-                    if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= -3 && newZ < boardSize)
+                    if (newX >= 0 && newX < boardSize && newY >= 0 && newY < boardSize && newZ >= 0 && newZ < boardSize)
                     {
                         Piece c = Game.Board.board[newX, newY, newZ].Piece;
 

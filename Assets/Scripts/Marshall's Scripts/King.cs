@@ -16,7 +16,7 @@ public class King : Piece
         this.currentZ = (int)piecePosition.z;
         this.isPlayer1 = true;
         this.selected = false;
-        this.pieceType = "King";
+        this.pt = pieceType.King;
     }
 
     public void Update()

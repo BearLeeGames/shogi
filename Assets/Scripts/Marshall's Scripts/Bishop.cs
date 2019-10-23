@@ -18,7 +18,7 @@ public class Bishop : Piece
         this.isPlayer1 = true;
         this.selected = false;
         this.promoted = false;
-        this.pieceType = "Bishop";
+        this.pt = pieceType.Bishop;
     }
 
     public void Update()

@@ -18,7 +18,7 @@ public class Knight : Piece
         this.isPlayer1 = true;
         this.selected = false;
         this.promoted = false;
-        this.pieceType = "Knight";
+        this.pt = pieceType.Knight;
         
     }
 
