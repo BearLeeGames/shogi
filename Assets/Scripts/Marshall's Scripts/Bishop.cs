@@ -26,20 +26,7 @@ public class Bishop : Piece
         // To do: implement checking if piece is selected, and if space to move to has been selected
         updatePossibleMoves();
 
-        // For testing purposes to see lance movement
-        //if (Input.GetKeyDown(KeyCode.Keypad1))
-        //{
-        //    move((int)piecePosition.x, (int)piecePosition.y, (int)piecePosition.z + 1);
 
-        //}
-        //else if (Input.GetKeyDown(KeyCode.Keypad2))
-        //{
-        //    move((int)piecePosition.x, (int)piecePosition.y, (int)piecePosition.z + 2);
-        //}
-        //else if (Input.GetKeyDown(KeyCode.Keypad3))
-        //{
-        //    move((int)piecePosition.x, (int)piecePosition.y, (int)piecePosition.z + 3);
-        //}
     }
 
     private void promote()

@@ -285,7 +285,6 @@ namespace Game
             }
         }
 
-
         /*
          * Moves a piece to the given location IF valid
          * 
