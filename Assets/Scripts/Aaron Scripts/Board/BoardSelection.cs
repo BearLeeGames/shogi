@@ -256,7 +256,7 @@ namespace Game
                     // if you haven't clicked on a piece already, click on it
                     if (selectedPiece == null)
                     {
-                        Debug.Log("SELECT PIECE");
+                        //Debug.Log("SELECT PIECE");
                         SelectShogiPiece(mouseX, mouseY, mouseZ);
                     }
                     else
@@ -264,7 +264,7 @@ namespace Game
                         // check if the move is allowed
                         if (CheckMove(selectedPiece.getPossibleMoves(), new Vector3(mouseX, mouseY, mouseZ)))
                         {
-                            Debug.Log("MOVE PIECE");
+                            //Debug.Log("MOVE PIECE");
                             MoveShogiPiece(mouseX, mouseY, mouseZ);
                         }
                         // hide the range cubes and reset selectedPiece

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Graveyard : MonoBehaviour {
+public class Graveyard : MonoBehaviour
+{
 
     /**
      * Holds all the data members that the class
@@ -58,6 +59,26 @@ public class Graveyard : MonoBehaviour {
      */
     #region Public Methods
 
+    /*
+     * Toggle whether the Graveyard is showing
+     *
+     *
+     */
+
+    public void ToggleGraveyard()
+    {
+        // toggle background and captured pieces off
+        if (this.GetComponent<Image>().enabled) {
+            this.GetComponent<Image>().enabled = false;
+            this.HideCapturedPieces();
+        }
+        else
+        {
+            this.GetComponent<Image>().enabled = true;
+            this.ShowCapturedPieces();
+        }
+    }
+
     /* 
      * Add a captured piece to a player's graveyard:
      *  Increase count if captured piece exists
@@ -78,23 +99,7 @@ public class Graveyard : MonoBehaviour {
             }
             else
             {
-                // create a new UI object
-                GameObject capturedPiece = Instantiate(capturedPieceUI, transform);
-
-                // get the CapturedPiece class and set the data
-                CapturedPiece cpData = capturedPiece.GetComponent<CapturedPiece>();
-
-                cpData.count = 1;
-                cpData.type = pieceType;
-                cpData.isPlayer1 = isPlayer1;
-
-                // set the text
-                Text cpText = capturedPiece.GetComponentInChildren<Text>();
-
-                cpText.text = cpData.type.ToString() + ": " + cpData.count;
-
-                // set the UI object in the graveyard dictionary
-                Graveyard1[pieceType] = capturedPiece;
+                CreateGraveyardObject(Graveyard1, pieceType, isPlayer1);
             }
         }
         else
@@ -105,55 +110,85 @@ public class Graveyard : MonoBehaviour {
             }
             else
             {
-                // create a new UI object
-                GameObject capturedPiece = Instantiate(capturedPieceUI, transform);
-
-                // get the CapturedPiece class and set the data
-                CapturedPiece cpData = capturedPiece.GetComponent<CapturedPiece>();
-
-                cpData.count = 1;
-                cpData.type = pieceType;
-                cpData.isPlayer1 = isPlayer1;
-
-                // set the text
-                Text cpText = capturedPiece.GetComponentInChildren<Text>();
-
-                cpText.text = cpData.type.ToString() + ": " + cpData.count;
-
-                // set the UI object in the graveyard dictionary
-                Graveyard2[pieceType] = capturedPiece;
+                CreateGraveyardObject(Graveyard2, pieceType, isPlayer1);
             }
         }
     }
 
 
-    //TODO: SET UI POSITIONS RELATIVE TO GRAVEYARD
-    // CREATE UI OBJECT USING FUNCTION
-    // MAKE LOOK PRETTIER
-    // TOGGLE WITH BUTTON
+
+    /*
+     * Create a new UI list object for displaying the Graveyard
+     *
+     */
+    private void CreateGraveyardObject(Dictionary<pieceType, GameObject> graveyard, pieceType pieceType, bool isPlayer1)
+    {
+        // create a new UI object
+        GameObject capturedPiece = Instantiate(capturedPieceUI, transform);
+
+        // get the CapturedPiece class and set the data
+        CapturedPiece cpData = capturedPiece.GetComponent<CapturedPiece>();
+
+        cpData.count = 1;
+        cpData.type = pieceType;
+        cpData.isPlayer1 = isPlayer1;
+
+        // set the text
+        Text cpText = capturedPiece.GetComponentInChildren<Text>();
+
+        cpText.text = cpData.type.ToString() + ": " + cpData.count;
+
+        RectTransform rectTransform = capturedPiece.GetComponent<RectTransform>();
+
+        if (isPlayer1)
+        {
+            rectTransform.anchoredPosition = new Vector3(rectTransform.anchoredPosition3D.x, 320 - (40 * graveyard.Count), rectTransform.anchoredPosition3D.z);
+        }
+        else
+        {
+            rectTransform.anchoredPosition = new Vector3(rectTransform.anchoredPosition3D.x, 0 - (40 * graveyard.Count), rectTransform.anchoredPosition3D.z);
+        }
+
+
+        // set the UI object in the graveyard dictionary
+        graveyard[pieceType] = capturedPiece;
+    }
 
 
     /*
      * Show the user which pieces have been captured
      * call when "show" button is toggled on
      */
-     public void ShowCapturedPieces()
+    public void ShowCapturedPieces()
     {
         // get the keys in the dicionary
         List<pieceType> keys = new List<pieceType>(Graveyard1.Keys);
 
         // loop through and show the captured piece UI objects
-        for(int i = 0; i < Graveyard1.Count; i++)
+        for (int i = 0; i < Graveyard1.Count; i++)
         {
             pieceType piece = keys[i];
 
             Graveyard1[piece].SetActive(true);
         }
+
+        // do the same for Graveyard2
+
+        keys = new List<pieceType>(Graveyard2.Keys);
+
+        // loop through and show the captured piece UI objects
+        for (int i = 0; i < Graveyard1.Count; i++)
+        {
+            pieceType piece = keys[i];
+
+            Graveyard2[piece].SetActive(true);
+        }
     }
 
+
     /*
-     * Show the user which pieces have been captured
-     * call when "show" button is toggled on
+     * Hide which pieces have been captured
+     * call when "show" button is toggled off
      */
     public void HideCapturedPieces()
     {
@@ -166,6 +201,18 @@ public class Graveyard : MonoBehaviour {
             pieceType piece = keys[i];
 
             Graveyard1[piece].SetActive(false);
+        }
+
+
+        // do the same for Graveyard2
+        keys = new List<pieceType>(Graveyard2.Keys);
+
+        // loop through and hide the captured piece UI objects
+        for (int i = 0; i < Graveyard2.Count; i++)
+        {
+            pieceType piece = keys[i];
+
+            Graveyard2[piece].SetActive(false);
         }
     }
 
