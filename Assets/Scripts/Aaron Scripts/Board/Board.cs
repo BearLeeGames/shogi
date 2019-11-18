@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Unity.Collections;
+using UnityEngine.UI;
+
 
 // took Board.cs from backend branch, adding in BoardManager.cs code (Aaron)
 
@@ -39,6 +41,9 @@ namespace Game
 
         [Header("Piece prefab and information")]
         [SerializeField] [Tooltip("List of piece prefabs")] List<GameObject> m_piecePrefabs;
+
+        [Header("UI elements")]
+        [SerializeField] [Tooltip("Show which user's turn it is")] public GameObject m_playerTurnText;
 
         // maps the name of the pieces to the prefabs
         // used to generate new pieces
@@ -117,6 +122,18 @@ namespace Game
         public static void changeTurns()
         {
             m_isPlayer1Turn = !m_isPlayer1Turn;
+            m_instance.changeTurnText();
+        }
+
+        public void changeTurnText()
+        {
+            string turn = "1";
+            if (!m_isPlayer1Turn)
+            {
+                turn = "2";
+            }
+
+            m_playerTurnText.GetComponent<Text>().text = "Player Turn: " + turn;
         }
 
 

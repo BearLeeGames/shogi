@@ -332,7 +332,6 @@ namespace Game
 
             // end turn
             Game.Board.changeTurns();
-
         }
 
         private void MoveShogiPiece(Vector3Int coordinate)
