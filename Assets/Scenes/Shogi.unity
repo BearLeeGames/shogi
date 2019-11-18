@@ -303,7 +303,8 @@ MonoBehaviour:
   hoverMaterial: {fileID: 2100000, guid: 503336d8231b6af4695cb3d4d997479f, type: 2}
   restingMaterial: {fileID: 2100000, guid: ef229fb7323b44a758ce4c16f136eb6f, type: 2}
   rangeMaterial: {fileID: 2100000, guid: 7ed1a8a851d1b4b04b9fa125c735712b, type: 2}
-  enemyInRangeMaterial: {fileID: 0}
+  enemyInRangeMaterial: {fileID: 2100000, guid: 1feef0ee4d5547e4aacaee6062dbbdfa,
+    type: 2}
   rangeCube: {fileID: 1838484217363954, guid: 33f1e9311e16748a2ab84c9a7b00a6e7, type: 2}
   GraveyardObject: {fileID: 1744133988}
 --- !u!1 &923233690
@@ -891,7 +892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48bd0773e7b1f694a918e894dc9358fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 1487463897}
+  cam: {fileID: 0}
 --- !u!1 &1744133988
 GameObject:
   m_ObjectHideFlags: 0
