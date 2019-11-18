@@ -22,17 +22,7 @@ public class Pawn : Piece
 
     public void Update()
     {
-        // To do: implement checking if piece is selected, and if space to move to has been selected
         updatePossibleMoves();
-
-        this.piecePosition = transform.position;
-
-        // For testing purposes to see pawn movement
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            move((int) piecePosition.x, (int) piecePosition.y , (int) piecePosition.z + 1);
-
-        }
     }
 
     private void promote()
@@ -40,8 +30,6 @@ public class Pawn : Piece
         promoted = true;
     }
 
-    // Pawn moves one space forward
-    // To do: implement checking of pieces occupying spaces in front of it using gameboard
     public override void updatePossibleMoves()
     {
         int boardSize = Game.Board.boardSize;

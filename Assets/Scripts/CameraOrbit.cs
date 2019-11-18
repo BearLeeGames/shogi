@@ -3,25 +3,46 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraOrbit : MonoBehaviour {
+    [SerializeField] private Camera cam;
 
-    public float turnSpeed = 4.0f;
-    public Transform board;
+    private Vector3 prevPosition;
 
-    private Vector3 offset;
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            prevPosition = cam.ScreenToViewportPoint(Input.mousePosition);
+        }
 
-    void Start() {
-        offset = new Vector3(board.position.x +27.0f, board.position.y + 45.0f, board.position.z + 27.0f);
+        if (Input.GetMouseButton(0))
+        {
+            Vector3 direction = prevPosition - cam.ScreenToViewportPoint(Input.mousePosition);
+            cam.transform.position = new Vector3();
+
+            cam.transform.Rotate(new Vector3(x: 1, y: 0, z: 0), angle:direction.y * 180);
+            cam.transform.Rotate(new Vector3(x: 0, y: 1, z: 0), angle:-direction.x * 180, relativeTo: Space.World);
+
+            cam.transform.Translate(new Vector3(x: 0, y: 0, z: -10));
+
+            prevPosition = cam.ScreenToViewportPoint(Input.mousePosition);
+        }
+
+        if (Input.GetAxis ("Mouse ScrollWheel") > 0)
+        {
+            if (cam.fieldOfView > 40)
+                cam.fieldOfView--;
+        }
+
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        {
+            if (cam.fieldOfView < 100)
+                cam.fieldOfView++;
+        }
     }
 
-    void LateUpdate() {
-        if (Input.GetMouseButton(0)) {
-            offset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * turnSpeed, Vector3.up) * offset;
-            transform.position = board.position + offset;
-            transform.LookAt(board.position);
-
-            offset = Quaternion.AngleAxis(Input.GetAxis("Mouse Y") * turnSpeed, Vector3.left) * offset;
-            transform.position = board.position + offset;
-            transform.LookAt(board.position);
-        }
+    public void ResetCamera() {
+        cam.transform.position = new Vector3(x: 0, y: 0, z: -10);
+        cam.transform.rotation = new Quaternion(x: 0, y: 0, z: 0, w:0);
+        cam.fieldOfView = 60;
     }
 }

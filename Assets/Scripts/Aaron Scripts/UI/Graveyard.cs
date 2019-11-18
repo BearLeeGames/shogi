@@ -95,7 +95,17 @@ public class Graveyard : MonoBehaviour
             // increase count accordingly
             if (Graveyard1.ContainsKey(pieceType))
             {
-                Graveyard1[pieceType].GetComponent<CapturedPiece>().count += 1;
+                // get the captured piece object
+                GameObject cpObject = Graveyard1[pieceType];
+                CapturedPiece capturedPiece = cpObject.GetComponent<CapturedPiece>();
+
+                // update the count
+                capturedPiece.GetComponent<CapturedPiece>().count += 1;
+
+                // update the text
+                Text cpText = cpObject.GetComponentInChildren<Text>();
+                cpText.text = capturedPiece.type.ToString() + ": " + capturedPiece.count.ToString();
+
             }
             else
             {
@@ -106,7 +116,9 @@ public class Graveyard : MonoBehaviour
         {
             if (Graveyard2.ContainsKey(pieceType))
             {
+                Debug.Log("player 2 capture a piece");
                 Graveyard2[pieceType].GetComponent<CapturedPiece>().count += 1;
+                Debug.Log(Graveyard2[pieceType].GetComponent<CapturedPiece>().count);
             }
             else
             {
@@ -142,11 +154,11 @@ public class Graveyard : MonoBehaviour
 
         if (isPlayer1)
         {
-            rectTransform.anchoredPosition = new Vector3(rectTransform.anchoredPosition3D.x, 320 - (40 * graveyard.Count), rectTransform.anchoredPosition3D.z);
+            rectTransform.anchoredPosition = new Vector3(rectTransform.anchoredPosition3D.x, 160 - (35 * graveyard.Count), rectTransform.anchoredPosition3D.z);
         }
         else
         {
-            rectTransform.anchoredPosition = new Vector3(rectTransform.anchoredPosition3D.x, 0 - (40 * graveyard.Count), rectTransform.anchoredPosition3D.z);
+            rectTransform.anchoredPosition = new Vector3(rectTransform.anchoredPosition3D.x, -20 - (35 * graveyard.Count), rectTransform.anchoredPosition3D.z);
         }
 
 
@@ -177,7 +189,7 @@ public class Graveyard : MonoBehaviour
         keys = new List<pieceType>(Graveyard2.Keys);
 
         // loop through and show the captured piece UI objects
-        for (int i = 0; i < Graveyard1.Count; i++)
+        for (int i = 0; i < Graveyard2.Count; i++)
         {
             pieceType piece = keys[i];
 

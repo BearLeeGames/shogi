@@ -24,12 +24,7 @@ public class Knight : Piece
 
     public void Update()
     {
-
-        // To do: implement checking if piece is selected, and if space to move to has been selected
         updatePossibleMoves();
-
-        // For testing purposes to see knight movement
-
     }
 
     private void promote()
@@ -37,8 +32,6 @@ public class Knight : Piece
         promoted = true;
     }
 
-    // Lance can move to any amount of squares ahead of it
-    // To do: implement checking of pieces occupying spaces in front of it using gameboard
     public override void updatePossibleMoves()
     {
         int boardSize = Game.Board.boardSize;

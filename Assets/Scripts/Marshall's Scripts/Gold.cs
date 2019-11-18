@@ -21,12 +21,7 @@ public class Gold : Piece
 
     public void Update()
     {
-
-        // To do: implement checking if piece is selected, and if space to move to has been selected
         updatePossibleMoves();
-
-        // For testing purposes to see knight movement
-
     }
 
     public override void updatePossibleMoves()

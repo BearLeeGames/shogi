@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum pieceType { Pawn, Lance, Knight, Bishop, Rook, King, Gold, Silver, PromotedRook, PromotedBishop, PromotedSilver}
+public enum pieceType { Pawn, Lance, Knight, Bishop, Rook, King, Gold, Silver, PromotedRook, PromotedBishop, PromotedSilver, PromotedKnight, PromotedLance, PromotedPawn}
 
 public abstract class Piece : MonoBehaviour
 {

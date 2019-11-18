@@ -114,5 +114,6 @@ MonoBehaviour:
   currentZ: 0
   isPlayer1: 0
   selected: 0
+  pieceType: 
   possibleMoves: []
   promoted: 0
