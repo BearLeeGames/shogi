@@ -116,9 +116,16 @@ public class Graveyard : MonoBehaviour
         {
             if (Graveyard2.ContainsKey(pieceType))
             {
-                Debug.Log("player 2 capture a piece");
-                Graveyard2[pieceType].GetComponent<CapturedPiece>().count += 1;
-                Debug.Log(Graveyard2[pieceType].GetComponent<CapturedPiece>().count);
+                // get the captured piece object
+                GameObject cpObject = Graveyard2[pieceType];
+                CapturedPiece capturedPiece = cpObject.GetComponent<CapturedPiece>();
+
+                // update the count
+                cpObject.GetComponent<CapturedPiece>().count += 1;
+
+                // update the text
+                Text cpText = cpObject.GetComponentInChildren<Text>();
+                cpText.text = capturedPiece.type.ToString() + ": " + capturedPiece.count.ToString();
             }
             else
             {
