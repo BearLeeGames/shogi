@@ -369,7 +369,7 @@ namespace Game
         private void CapturePiece(Piece piece)
         {
             // destroy the piece
-            Destroy(piece);
+            Destroy(piece.gameObject);
 
             // add the count to the other player's graveyard
             Graveyard.AddPiece(piece.pt, !piece.isPlayer1);
