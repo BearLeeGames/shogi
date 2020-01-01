@@ -9,6 +9,7 @@ namespace Game
     //</summary>
     public class BoardSelection : MonoBehaviour
     {
+        static BoardSelection m_instance;
         /**
          * Holds all the data members that the class
          * contains.
@@ -23,21 +24,19 @@ namespace Game
         // the current selected piece
         private Piece selectedPiece;
 
-        // the current mouse hovered spot (a CubeLight object)
-        private GameObject hoveredSpot;
+        // the current mouse hovered spot (a BoardTile)
+        private BoardTile oldHoveredSpot;
 
         // materials used to show hover vs resting cube
         [Header("Tile materials")]
         [SerializeField] [Tooltip("The tile material on hover")] Material hoverMaterial;
-        [SerializeField] [Tooltip("The tile material w/ no hover")] Material restingMaterial;
-        [SerializeField] [Tooltip("The tile material for range indicators")] Material rangeMaterial;
+        [SerializeField] [Tooltip("The tile material w/o hover")] Material restingMaterial;
+        [SerializeField] [Tooltip("The tile material to show movement range indicators")] Material rangeMaterial;
         [SerializeField] [Tooltip("The tile material for enemy in range")] Material enemyInRangeMaterial;
+        [SerializeField] [Tooltip("The tile material for piece drop indicators")] Material dropIndicatorMaterial;
 
         // GameObject used to show the movement/attack range of a pieve
         [SerializeField] private GameObject rangeCube;
-
-        // list of range cubes
-        List<GameObject> rangeCubes;
 
         // list of Vector3 moves that a piece can take
         List<Vector3> allowedMoves;
@@ -57,24 +56,9 @@ namespace Game
          */
         #region Member Properties
 
-
-        /*  NOTE: Not used if we only change cube materials instead of the whole object
-         *  pool the previously used range cubes
-         *  reuse and create new range cubes as necessary
-         */
-        private GameObject GetRangeCube()
+        public static BoardSelection Instance
         {
-            // return the first available (not active) range cube 
-            GameObject cube = rangeCubes.Find(c => !c.activeSelf);
-
-            // if there aren't any available to use, instatiate another one and add it
-            if (cube == null)
-            {
-                cube = Instantiate(rangeCube);
-                rangeCubes.Add(cube);
-            }
-
-            return cube;
+            get { return m_instance; }
         }
 
         #endregion
@@ -87,7 +71,7 @@ namespace Game
 
         void Start()
         {
-            rangeCubes = new List<GameObject>();
+            m_instance = this;
             Graveyard = GraveyardObject.GetComponent<Graveyard>();
         }
 
@@ -114,6 +98,129 @@ namespace Game
          * outside of the class.
          */
         #region Public Methods
+        /* change the whole board into range cubes for picking coordinates to drop a piece
+         * from here, user will pick a level (a Y value)
+         *
+         * bool highlight - true changes to range cubes, false changes back to normal
+         */
+        public void RangeBoard(bool activate, int clickY, int clickZ)
+        {
+            if (clickY != -1) 
+            {
+                for (int x = 0; x < Game.Board.boardSize; x++)
+                {
+                    // show only the row (y and z specified)
+                    if (clickZ != -1)
+                    {
+                        GameObject tile = Game.Board.board[x, clickY, clickZ].Tile;
+                        tile.GetComponent<Renderer>().material = dropIndicatorMaterial;
+                        tile.layer = 9;
+                    }
+
+                    // show the entire level (just y specified)
+                    else
+                    {
+                        for (int z = 0; z < Game.Board.boardSize; z++)
+                        {
+                            GameObject tile = Game.Board.board[x, clickY, z].Tile;
+                            tile.GetComponent<Renderer>().material = dropIndicatorMaterial;
+                            tile.layer = 9;
+                        }
+                    }
+                }
+            }
+
+            else
+            {
+                //show ALL tiles
+                for (int x = 0; x < Game.Board.boardSize; x++)
+                {
+                    for (int y = 0; y < Game.Board.boardSize; y++)
+                    {
+                        for (int z = 0; z < Game.Board.boardSize; z++)
+                        {
+                            GameObject tile = Game.Board.board[x, y, z].Tile;
+
+                            // if true, change to range tile
+                            if (activate)
+                            {
+                                tile.GetComponent<Renderer>().material = dropIndicatorMaterial;
+                                tile.layer = 9; // Piece Layer
+                            }
+
+                            // else change back to regular tile
+                            else
+                            {
+                                Debug.Log("reset");
+                                tile.GetComponent<Renderer>().material = restingMaterial;
+                                tile.layer = 0; // Default Layer
+                            }
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+        /* highlight/unhighlight board accordingly: entire level (just y provided) or just a row (z and y provided)
+         *
+         * Params:
+         *  1. bool highlight - true highlights, false unhighlights
+         *  2. int z, y - the coordinates of cubes to highlight
+         * 
+         */
+         void HighlightRows(bool highlight, int hoverX, int hoverY, int hoverZ)
+        {
+            // x and y are specified, highlight by tile (x given through hover, y and z are already selected)
+            if (CapturedPiece.selectedY != -1 && CapturedPiece.selectedZ != -1)
+            {
+                if (highlight)
+                {
+                    Game.Board.board[hoverX, CapturedPiece.selectedY, CapturedPiece.selectedZ].Tile.GetComponent<Renderer>().material = hoverMaterial;
+                }
+                else
+                {
+                    Game.Board.board[oldHoveredSpot.Position.x, oldHoveredSpot.Position.y, oldHoveredSpot.Position.z].Tile.GetComponent<Renderer>().material = dropIndicatorMaterial;
+                }
+            }
+
+            else
+            {
+                for (int x = 0; x < Game.Board.boardSize; x++)
+                {
+                    // if y is specified, highlight by row (z given through hover, y already selected)
+                    if (CapturedPiece.selectedY != -1)
+                    {
+                        if (highlight)
+                        {
+                            Game.Board.board[x, CapturedPiece.selectedY, hoverZ].Tile.GetComponent<Renderer>().material = hoverMaterial;
+                        }
+                        else
+                        {
+                            Game.Board.board[x, CapturedPiece.selectedY, oldHoveredSpot.Position.z].Tile.GetComponent<Renderer>().material = dropIndicatorMaterial;
+                        }
+                    }
+
+                    // if no values are specified, highlight by level (y given through hover)
+                    else
+                    {
+                        for (int z = 0; z < Game.Board.boardSize; z++)
+                        {
+                            if (highlight)
+                            {
+                                Game.Board.board[x, hoverY, z].Tile.GetComponent<Renderer>().material = hoverMaterial;
+                            }
+                            else
+                            {
+                                Game.Board.board[x, oldHoveredSpot.Position.y, z].Tile.GetComponent<Renderer>().material = dropIndicatorMaterial;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
 
         #endregion
 
@@ -124,15 +231,25 @@ namespace Game
          */
         #region Member Functions
 
-        // update the current location of the mouse and highlight pieces
+        /* update the current location of the mouse and highlight pieces
+         *
+         * - use Raycast to determine where the mouse is hovering on the board
+         * - handle hover effects based on if in piece drop mode or piece selection mode
+         * - otherwise remove effects if hovering over nothing
+         *
+         *
+         */
         private void CheckHover()
         {
+
+            //Debug.Log("[" + CapturedPiece.selectedX + ", " + CapturedPiece.selectedY + ", " + CapturedPiece.selectedZ + "]");
+
             RaycastHit hit;
 
             // 1. ray provided is from camera to screen point (mouse position)
             // 2. out is the result of the collision
             // 3. 50 is max distance of the ray
-            // 4. layer mask (have the ray only hit the chess board and not the piece
+            // 4. layer mask (only hits objects on this layer)
 
             // if hovering something
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 50.0f, LayerMask.GetMask("PieceLayer")))
@@ -142,7 +259,6 @@ namespace Game
                 mouseX = (int)Mathf.RoundToInt(hit.point.x);
                 mouseY = (int)Mathf.RoundToInt(hit.point.y);
                 mouseZ = (int)Mathf.RoundToInt(hit.point.z);
-
 
                 // convert the spacial coordinates into array coordinates
                 Vector3 arrayCoordinates = Game.Board.SpaceToArrayCoordinates(mouseX, mouseY, mouseZ);
@@ -158,25 +274,17 @@ namespace Game
 
                 Piece currentHoveredPiece = Game.Board.board[mouseX, mouseY, mouseZ].Piece;
 
-                // no piece selected yet
-                if (selectedPiece == null)
+                // if we are in piece drop mode
+                if (CapturedPiece.pieceDropMode)
                 {
-                    // just highlight pieces
-                    if (currentHoveredPiece != null)
-                    {
-                        // change the design of hovered cubes
-                        HandleHoverCube(mouseX, mouseY, mouseZ);
-                    }
+                    // hover based on piece drop selection
+                    HandlePieceDropHover();
                 }
 
-                // a piece has been selected
                 else
                 {
-                    // highlight range cubes
-                    if (CheckMove(selectedPiece.getPossibleMoves(), new Vector3(mouseX, mouseY, mouseZ)))
-                    {
-                        HandleHoverCube(mouseX, mouseY, mouseZ);
-                    }
+                    // hover based on regular piece selection
+                    HandlePieceSelectHover(currentHoveredPiece);
                 }
 
             }
@@ -184,26 +292,33 @@ namespace Game
             else
             {
                 // change the color back to normal
-                if (hoveredSpot != null)
+                if (oldHoveredSpot != null)
                 {
                     // change the material of the previously hovered spot back to normal
-                    if (hoveredSpot.tag == "Range")
+                    if (oldHoveredSpot.Tile.tag == "Range")
                     {
-                        hoveredSpot.GetComponent<Renderer>().material = rangeMaterial;
+                        oldHoveredSpot.Tile.GetComponent<Renderer>().material = rangeMaterial;
                     }
-                    else if (hoveredSpot.tag == "EnemyInRange")
+                    else if (oldHoveredSpot.Tile.tag == "EnemyInRange")
                     {
-                        hoveredSpot.GetComponent<Renderer>().material = enemyInRangeMaterial;
+                        oldHoveredSpot.Tile.GetComponent<Renderer>().material = enemyInRangeMaterial;
                     }
                     else
                     {
-                        hoveredSpot.GetComponent<Renderer>().material = restingMaterial;
+                        if (CapturedPiece.pieceDropMode)
+                        {
+                            HighlightRows(false, -1, -1, -1);
+                        }
+                        else
+                        {
+                            oldHoveredSpot.Tile.GetComponent<Renderer>().material = restingMaterial;
+                        }
                     }
                 }
 
 
-                // set the hovered spot to null (not hovering over anything
-                hoveredSpot = null;
+                // set the hovered spot to null (not hovering over anything)
+                oldHoveredSpot = null;
 
                 mouseX = -1;
                 mouseY = -1;
@@ -211,44 +326,151 @@ namespace Game
             }
         }
 
-        // handle the material of the cubes being hovered over
-        private void HandleHoverCube(int currentX, int currentY, int currentZ)
+        /* handle piece drop hovering
+         *
+         * depending on what has been selected, (un)highlight different parts of the board
+         *
+         */
+        void HandlePieceDropHover()
+        {
+            if (oldHoveredSpot != null)
+            {
+                // if we haven't selected a Y yet
+                if (CapturedPiece.selectedY == -1)
+                {
+
+                    // if we've hovered over a new position/y value
+                    if (oldHoveredSpot.Position.y != mouseY)
+                    {
+                        // highlight the new
+                        HighlightRows(true, -1, mouseY, -1);
+
+                        // unhighlight the old
+                        HighlightRows(false, -1, -1, -1);
+                    }
+                }
+
+                // if we've selected a Y position, and choosing a Z
+                else if (CapturedPiece.selectedZ == -1)
+                {
+
+                    //Debug.Log("Looking for Z");
+
+                    // if we've hovered over a new position/z value
+                    // y value must matched our previously selected y
+                    if (oldHoveredSpot.Position.z != mouseZ && CapturedPiece.selectedY == mouseY)
+                    {
+                        // highlight the new
+                        HighlightRows(true, -1, mouseY, mouseZ);
+
+                        // unhighlight the old
+                        HighlightRows(false, -1, -1, -1);
+                    }
+                }
+
+                // if we've selected a Z and Y position, and choosing the X
+                else if (CapturedPiece.selectedX == -1)
+                {
+
+                    Debug.Log(Game.Board.board[mouseX, mouseY, mouseZ].Piece);
+
+
+
+                    // if we've hovered over a new position
+                    // x and y value must match our previously selected x and y
+                    // tile must not have a piece already in it
+                    if (oldHoveredSpot.Position.x != mouseX && CapturedPiece.selectedY == mouseY && CapturedPiece.selectedZ == mouseZ)
+                    {
+                        Debug.Log("found an option!");
+
+                        // highlight the new
+                        HighlightRows(true, mouseX, mouseY, mouseZ);
+
+                        // unhighlight the old
+                        HighlightRows(false, -1, -1, -1);
+                    }
+                }
+            }
+
+
+            oldHoveredSpot = Game.Board.board[mouseX, mouseY, mouseZ];
+
+        }
+
+        /* handle piece selection hovering
+         *
+         * (un)highlight different cubes depending on what the selection is
+         *
+         */
+        void HandlePieceSelectHover(Piece current)
+        {
+            // no piece has been selected yet
+            if (selectedPiece == null)
+            {
+                // just highlight pieces as you hover over
+                if (current != null)
+                {
+                    // change the material of hovered cube
+                    HandleHoverCube();
+                }
+            }
+
+            // a piece is currently selected
+            else
+            {
+                // highlight over hovered range cubes
+                if (CheckMove(selectedPiece.getPossibleMoves(), new Vector3(mouseX, mouseY, mouseZ)))
+                {
+                    HandleHoverCube();
+                }
+            }
+        }
+
+        /* handle the material of the cubes being hovered over
+         * when you mouse away from a cube, change to normal material
+         * when you mouse on a cube, change to range or enemyInRange material
+         *
+         * currentX, currentY, currentZ are coordinates to the currently hovered tile
+         *
+         */
+        void HandleHoverCube()
         {
 
             // if the hovered spot is different from the previously hovered spot
-            if (hoveredSpot != Game.Board.board[currentX, currentY, currentZ].Tile)
+            if (oldHoveredSpot == null || oldHoveredSpot.Tile != Game.Board.board[mouseX, mouseY, mouseZ].Tile)
             {
 
                 // if the currently hovered spot isn't null
-                if (hoveredSpot != null)
+                if (oldHoveredSpot != null && oldHoveredSpot.Tile != null)
                 {
                     // change the material of the previously hovered spot back to normal
-                    if (hoveredSpot.tag == "Range")
+                    if (oldHoveredSpot.Tile.tag == "Range")
                     {
-                        hoveredSpot.GetComponent<Renderer>().material = rangeMaterial;
+                        oldHoveredSpot.Tile.GetComponent<Renderer>().material = rangeMaterial;
                     }
-                    else if(hoveredSpot.tag == "EnemyInRange")
+                    else if (oldHoveredSpot.Tile.tag == "EnemyInRange")
                     {
-                        hoveredSpot.GetComponent<Renderer>().material = enemyInRangeMaterial;
+                        oldHoveredSpot.Tile.GetComponent<Renderer>().material = enemyInRangeMaterial;
                     }
                     else
                     {
-                        hoveredSpot.GetComponent<Renderer>().material = restingMaterial;
+                        oldHoveredSpot.Tile.GetComponent<Renderer>().material = restingMaterial;
                     }
 
 
                 }
 
                 // change the new hovered spot to the hoverMaterial
-                Game.Board.board[currentX, currentY, currentZ].Tile.GetComponent<Renderer>().material = hoverMaterial;
+                Game.Board.board[mouseX, mouseY, mouseZ].Tile.GetComponent<Renderer>().material = hoverMaterial;
 
-                // set the new hoveredSpot
-                hoveredSpot = Game.Board.board[currentX, currentY, currentZ].Tile;
+                // set the new previouslyHoveredSpot
+                oldHoveredSpot = Game.Board.board[mouseX, mouseY, mouseZ];
             }
         }
 
+
         // check what you've clicked on
-        private void CheckClick()
+        void CheckClick()
         {
 
             int boardSize = Game.Board.boardSize;
@@ -262,37 +484,107 @@ namespace Game
                 // if you clicked within the board (3d array coordinates)
                 if (mouseX >= 0 && mouseX < Game.Board.boardSize && mouseY >= 0 && mouseY < boardSize && mouseZ >= 0 && mouseZ < boardSize)
                 {
-                    // if you haven't clicked on a piece already, click on it
-                    if (selectedPiece == null)
+                    if (CapturedPiece.pieceDropMode)
                     {
-                        //Debug.Log("SELECT PIECE");
-                        SelectShogiPiece(mouseX, mouseY, mouseZ);
+                        HandlePieceDropClick();
                     }
                     else
                     {
-                        // check if the move is allowed
-                        if (CheckMove(selectedPiece.getPossibleMoves(), new Vector3(mouseX, mouseY, mouseZ)))
-                        {
-                            //Debug.Log("MOVE PIECE");
-                            MoveShogiPiece(mouseX, mouseY, mouseZ);
-                        }
-                        // hide the range cubes and reset selectedPiece
-                        HideRange(selectedPiece.getPossibleMoves());
-                        selectedPiece = null;
+                        HandleSelectClick();
                     }
+
                 }
+
+                // clicked outside the board
                 else
                 {
-                    // deactivate the selected piece here
-                    if (selectedPiece != null)
-                    {
-                        // hide the range cubes and reset selectedPiece
-                        HideRange(selectedPiece.getPossibleMoves());
-                        selectedPiece = null;
-                    }
-
+                    // deactivate any selected pieces or modes
+                    DeactivateBoard();
                 }
 
+            }
+        }
+
+        /* Handle a click to do a piece drop
+         *
+         * 1. select a level (Y axis)
+         * 2. select a row (X axis)
+         * 3. select a tile (Z axis)
+         *      - drop the piece here, remove from graveyard
+         */
+        void HandlePieceDropClick()
+        {
+            // reset the hover tiles
+            HighlightRows(false, -1, mouseY, -1);
+
+            // reset which tiles are clickable
+            RangeBoard(false, -1, -1);
+
+            Debug.Log("click");
+
+            if (CapturedPiece.selectedY == -1)
+            {
+                Debug.Log("just set the level");
+                CapturedPiece.setSelectedY(mouseY);
+                RangeBoard(true, mouseY, -1);
+            }
+            else if (CapturedPiece.selectedZ == -1 && CapturedPiece.selectedY == mouseY)
+            {
+                CapturedPiece.setSelectedZ(mouseZ);
+                RangeBoard(true, mouseY, mouseZ);
+            }
+            else if (CapturedPiece.selectedX == -1 && CapturedPiece.selectedY == mouseY && CapturedPiece.selectedZ == mouseZ)
+            {
+                CapturedPiece.setSelectedX(mouseX);
+            }
+        }
+
+        /* Handle a click to select or move a piece
+         *
+         * - if nothing selected, see if you can select a piece
+         * - if something selected, try moving the piece
+         *
+         */
+        void HandleSelectClick()
+        {
+            // if you haven't clicked on a piece already, click on it
+            if (selectedPiece == null)
+            {
+                SelectShogiPiece(mouseX, mouseY, mouseZ);
+            }
+            else
+            {
+                // check if the move is allowed
+                if (CheckMove(selectedPiece.getPossibleMoves(), new Vector3(mouseX, mouseY, mouseZ)))
+                {
+                    MoveShogiPiece(mouseX, mouseY, mouseZ);
+                }
+                // hide the range cubes and reset selectedPiece
+                HideRange(selectedPiece.getPossibleMoves());
+                selectedPiece = null;
+            }
+        }
+
+        /* Deactivate any selected pieces or modes
+         *
+         * - occurs when clicking outside of the the board
+         *
+         */
+        void DeactivateBoard()
+        {
+            // deactivate the selected piece here
+            if (selectedPiece != null)
+            {
+                // hide the range cubes and reset selectedPiece
+                HideRange(selectedPiece.getPossibleMoves());
+                selectedPiece = null;
+            }
+
+            // deactivate piece drop mode
+            if (CapturedPiece.pieceDropMode)
+            {
+                CapturedPiece.setPieceDropMode(false);
+                RangeBoard(false, -1, -1);
             }
         }
 
@@ -307,7 +599,7 @@ namespace Game
          * move to Board.cs?
          * 
          */
-        private void MoveShogiPiece(int x, int y, int z)
+        void MoveShogiPiece(int x, int y, int z)
         {
 
             Piece piece = Game.Board.board[x, y, z].Piece;
@@ -459,12 +751,6 @@ namespace Game
         // for each rangecube, set active to false
         private void HideRange(List<Vector3> moves)
         {
-            // NOTE: use this if we use rangeCube objects
-            //foreach (GameObject cube in rangeCubes)
-            //{
-            //    cube.SetActive(false);
-            //}
-
             // if not, change material of tiles back to normal
             for (int i = 0; i < moves.Count; i++)
             {

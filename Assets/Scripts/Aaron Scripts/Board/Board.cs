@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Unity.Collections;
@@ -248,7 +247,7 @@ namespace Game
          */
         #region Unity Methods
 
-        private void Start()
+        void Start()
         {
             // Save the current instance of this class
             m_instance = this;

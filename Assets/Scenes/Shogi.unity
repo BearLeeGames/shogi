@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.49641287, b: 0.5748173, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27350fa107f9bdc4d8e59790e7e72c61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_tile: {fileID: 1755706636762340, guid: ef0c70ca8b3d84030ae6184dd446496e, type: 2}
+  m_tile: {fileID: 1298968579524004, guid: c9a089841f99a48208fb97a28bae30e0, type: 2}
   m_highlightTile: {fileID: 1838484217363954, guid: 33f1e9311e16748a2ab84c9a7b00a6e7,
     type: 2}
   m_piecePrefabs:
@@ -302,9 +302,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hoverMaterial: {fileID: 2100000, guid: 503336d8231b6af4695cb3d4d997479f, type: 2}
-  restingMaterial: {fileID: 2100000, guid: ef229fb7323b44a758ce4c16f136eb6f, type: 2}
+  restingMaterial: {fileID: 2100000, guid: 49890a4ada4324353a41ea2bcb07061a, type: 2}
   rangeMaterial: {fileID: 2100000, guid: 7ed1a8a851d1b4b04b9fa125c735712b, type: 2}
   enemyInRangeMaterial: {fileID: 2100000, guid: 1feef0ee4d5547e4aacaee6062dbbdfa,
+    type: 2}
+  dropIndicatorMaterial: {fileID: 2100000, guid: ef229fb7323b44a758ce4c16f136eb6f,
     type: 2}
   rangeCube: {fileID: 1838484217363954, guid: 33f1e9311e16748a2ab84c9a7b00a6e7, type: 2}
   GraveyardObject: {fileID: 1744133988}
